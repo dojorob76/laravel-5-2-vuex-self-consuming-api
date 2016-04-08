@@ -1,0 +1,28 @@
+/*
+* This file holds the Bootstrap Pre-Processing overrides (for variables set as '!default').
+* Vendor CSS files need to respect the 'public/build/css/**' directory structure.
+*/
+//---------------------------------------------------------------------------------------------------------------------
+// BOOTSTRAP GLYPHICONS
+$icon-font-path: ('../../fonts/');
+
+// BOOTSTRAP COLOR SCHEME
+$brand-primary: $mdblue;
+$brand-info: $ltblue;
+$brand-warning: $mdyellow;
+$brand-danger: $ltred;
+
+// SCAFFOLDING
+// Background color for 'body'
+$body-bg: $off-white;
+// Global text color on 'body'
+$text-color: $grshddk;
+// Global textual link color
+$link-color: $brand-info;
+$link-hover-color: $dkblue;
+
+// TYPOGRAPHY
+// Headings
+$headings-font-family: 'Life Savers', cursive;
+$headings-font-weight: 700;
+$headings-color: $grshdlt;

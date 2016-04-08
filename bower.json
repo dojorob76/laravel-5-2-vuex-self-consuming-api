@@ -1,0 +1,28 @@
+{
+  "name": "cifi",
+  "description": "Front-end packages for the Cinefiles.co web app",
+  "main": "",
+  "authors": [
+    "Donna Robinson <donna@cinefiles.co>"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "Bootstrap",
+    "jQuery",
+    "FontAwesome"
+  ],
+  "homepage": "https://github.com/MovieMeetinghouse/cinefiles",
+  "moduleType": [],
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap-sass": "^3.3.6",
+    "font-awesome": "^4.5.0"
+  }
+}
