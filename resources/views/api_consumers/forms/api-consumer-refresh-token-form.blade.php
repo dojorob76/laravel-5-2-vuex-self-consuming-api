@@ -1,4 +1,5 @@
 <!-- Api Consumer Refresh Token Form -->
+@include('global.partials._form-errors')
 <form method="POST"
       action="{{action('ApiConsumerController@refreshToken')}}"
       id="api-consumer-refresh-token-form"

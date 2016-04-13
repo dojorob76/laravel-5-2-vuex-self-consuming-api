@@ -11,8 +11,8 @@ use App\Http\Requests\ApiConsumer\ApiConsumerAccessRequest;
 use App\Http\Requests\ApiConsumer\ApiConsumerUpdateRequest;
 use App\Http\Requests\ApiConsumer\ApiConsumerResetKeyRequest;
 use App\Http\Requests\ApiConsumer\ApiConsumerActivationRequest;
-use App\Http\Requests\ApiConsumer\ApiConsumerReactivationRequest;
 use App\Http\Requests\ApiConsumer\ApiConsumerRefreshTokenRequest;
+use App\Http\Requests\ApiConsumer\ApiConsumerReactivationRequest;
 
 class ApiConsumerController extends BaseController
 {
@@ -27,7 +27,7 @@ class ApiConsumerController extends BaseController
      */
     public function __construct(JwTokenManager $jwTokenManager, ApiConsumerWebService $apiConsumerWebService)
     {
-        $this->middleware('api.owner', ['only' => 'show', 'update', 'destroy']);
+        $this->middleware('consumer.owner', ['only' => 'show', 'update', 'destroy']);
         $this->apiConsumerWebService = $apiConsumerWebService;
         parent::__construct($jwTokenManager);
     }

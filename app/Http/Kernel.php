@@ -31,6 +31,7 @@ class Kernel extends HttpKernel
             \Illuminate\Session\Middleware\StartSession::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
+            \App\Http\Middleware\AdminSubdomain::class,
         ],
 
         'api' => [
@@ -46,13 +47,13 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $routeMiddleware = [
-        'auth'       => \App\Http\Middleware\Authenticate::class,
-        'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
-        'can'        => \Illuminate\Foundation\Http\Middleware\Authorize::class,
-        'guest'      => \App\Http\Middleware\RedirectIfAuthenticated::class,
-        'throttle'   => \Illuminate\Routing\Middleware\ThrottleRequests::class,
-        'api.access' => \App\Http\Middleware\ApiAccessToken::class,
-        'api.admin'  => \App\Http\Middleware\ApiAdminToken::class,
-        'api.owner'  => \App\Http\Middleware\ApiConsumerIsOwner::class,
+        'auth'           => \App\Http\Middleware\Authenticate::class,
+        'auth.basic'     => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
+        'can'            => \Illuminate\Foundation\Http\Middleware\Authorize::class,
+        'guest'          => \App\Http\Middleware\RedirectIfAuthenticated::class,
+        'throttle'       => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+        'api.access'     => \App\Http\Middleware\ApiAccessToken::class,
+        'api.admin'      => \App\Http\Middleware\ApiAdminToken::class,
+        'consumer.owner' => \App\Http\Middleware\ApiConsumerIsOwner::class,
     ];
 }

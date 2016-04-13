@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "6e3b7a463f723ca7cf80ea65b294e160",
-    "content-hash": "306a0f4ba8895277d66a344bf8d9b198",
+    "hash": "3bd31a33e7f85efc74cfee58ebda21cf",
+    "content-hash": "a4494c80638f315c736372d61cd8d8f3",
     "packages": [
         {
             "name": "barryvdh/laravel-cors",
@@ -120,12 +120,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dingo/api.git",
-                "reference": "f2726db0675e6a8cd9b68024bdc181d36672d4ce"
+                "reference": "8cd1a6cd7d2ba9fc96841fd0745ef8fc1ce2a530"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dingo/api/zipball/f2726db0675e6a8cd9b68024bdc181d36672d4ce",
-                "reference": "f2726db0675e6a8cd9b68024bdc181d36672d4ce",
+                "url": "https://api.github.com/repos/dingo/api/zipball/8cd1a6cd7d2ba9fc96841fd0745ef8fc1ce2a530",
+                "reference": "8cd1a6cd7d2ba9fc96841fd0745ef8fc1ce2a530",
                 "shasum": ""
             },
             "require": {
@@ -165,7 +165,7 @@
             },
             "autoload": {
                 "psr-4": {
-                    "Dingo\\Api\\": "src"
+                    "Dingo\\Api\\": "src/"
                 },
                 "files": [
                     "src/helpers.php"
@@ -188,7 +188,7 @@
                 "laravel",
                 "restful"
             ],
-            "time": "2016-04-06 03:18:34"
+            "time": "2016-04-08 06:28:50"
         },
         {
             "name": "dingo/blueprint",
@@ -889,16 +889,16 @@
         },
         {
             "name": "monolog/monolog",
-            "version": "1.18.2",
+            "version": "1.19.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "064b38c16790249488e7a8b987acf1c9d7383c09"
+                "reference": "5f56ed5212dc509c8dc8caeba2715732abb32dbf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/064b38c16790249488e7a8b987acf1c9d7383c09",
-                "reference": "064b38c16790249488e7a8b987acf1c9d7383c09",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/5f56ed5212dc509c8dc8caeba2715732abb32dbf",
+                "reference": "5f56ed5212dc509c8dc8caeba2715732abb32dbf",
                 "shasum": ""
             },
             "require": {
@@ -963,7 +963,7 @@
                 "logging",
                 "psr-3"
             ],
-            "time": "2016-04-02 13:12:58"
+            "time": "2016-04-12 18:29:35"
         },
         {
             "name": "mtdowling/cron-expression",
@@ -1461,6 +1461,62 @@
                 "shell"
             ],
             "time": "2016-03-09 05:03:14"
+        },
+        {
+            "name": "silber/bouncer",
+            "version": "v1.0.0-alpha.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/JosephSilber/bouncer.git",
+                "reference": "ae4ed334bf6b86768917150a07adb2230e1d4a0e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/JosephSilber/bouncer/zipball/ae4ed334bf6b86768917150a07adb2230e1d4a0e",
+                "reference": "ae4ed334bf6b86768917150a07adb2230e1d4a0e",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/auth": "~5.1.20|5.2.*",
+                "illuminate/container": "~5.1.20|5.2.*",
+                "illuminate/contracts": "~5.1.20|5.2.*",
+                "illuminate/database": "~5.1.20|5.2.*"
+            },
+            "require-dev": {
+                "illuminate/cache": "~5.1.20|5.2.*",
+                "illuminate/console": "~5.1.20|5.2.*",
+                "phpunit/phpunit": "^4.8"
+            },
+            "suggest": {
+                "illuminate/cache": "Allows caching the bouncer's database queries",
+                "illuminate/console": "Allows running registered bouncer seeders via artisan"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Silber\\Bouncer\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Joseph Silber",
+                    "email": "contact@josephsilber.com"
+                }
+            ],
+            "description": "Bouncer handles roles and abilities for Laravel's ACL.",
+            "keywords": [
+                "abilities",
+                "acl",
+                "capabilities",
+                "laravel",
+                "permissions",
+                "roles"
+            ],
+            "time": "2016-03-27 18:24:07"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -4032,7 +4088,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "dingo/api": 20
+        "dingo/api": 20,
+        "silber/bouncer": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
