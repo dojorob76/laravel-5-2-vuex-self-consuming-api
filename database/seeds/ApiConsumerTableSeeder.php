@@ -15,18 +15,14 @@ class ApiConsumerTableSeeder extends Seeder
     {
         DB::table('api_consumers')->delete();
 
-        /**
-         * Create the Admin Super API Consumer
-         */
+        // Create the Admin Super API Consumer
         ApiConsumer::create([
             'email'     => env('ADMIN_EMAIL'),
             'api_token' => Hash::make(env('ADMIN_ACCESS_TOKEN')),
             'level'     => 9
         ]);
 
-        /**
-         * Create the System Super API Consumer
-         */
+        // Create the System Super API Consumer
         ApiConsumer::create([
             'email'     => env('SYSTEM_EMAIL'),
             'api_token' => Hash::make(env('SYSTEM_ACCESS_TOKEN')),

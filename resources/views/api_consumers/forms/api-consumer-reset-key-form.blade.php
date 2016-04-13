@@ -1,4 +1,5 @@
 <!-- API Consumer Reset Key Form -->
+@include('global.partials._form-errors')
 <form method="POST"
       action="{{action('ApiConsumerController@postResetKey')}}"
       id="api-consumer-reset-key-form"

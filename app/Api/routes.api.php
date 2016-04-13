@@ -27,7 +27,7 @@ $api->version('v1', [
         ->name('api-consumer/refresh-token.post');
 
     // Only allow Admins or Api Consumers to view/edit their own token info
-    $api->group(['middleware' => 'api.owner'], function ($api) {
+    $api->group(['middleware' => 'consumer.owner'], function ($api) {
         // Api Consumers (View Own, Update, Delete)
         $api->get('api-consumer/{id}', 'ApiApiConsumerController@show')->name('api-consumer/{id}.get');
         $api->put('api-consumer/{id}', 'ApiApiConsumerController@update')->name('api-consumer/{id}.put');

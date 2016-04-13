@@ -38,8 +38,8 @@ class ApiConsumerRefreshTokenRequest extends FormRequest
     public function messages()
     {
         // The email field is hidden, so if it is compromised, return a generic message
-        $emailMessage = 'This account could not be located. Please refresh the page and try again.';
-        $keyMessage = 'The Reset Key entered is not valid. Click the "Resend Reset Key" button to receive a new key.';
+        $emailMessage = 'We are unable to process your request at this time. Please refresh the page and try again.';
+        $keyMessage = 'The Reset Key provided is not valid. Click the "Resend Reset Key" button to receive a new key.';
 
         return [
             'email.required'            => $emailMessage,

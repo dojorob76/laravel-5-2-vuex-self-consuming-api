@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\ApiConsumer;
 
+use App\Utilities\ApiTokenManager;
 use Dingo\Api\Http\FormRequest;
 
 class ApiConsumerUpdateRequest extends FormRequest
@@ -63,12 +64,7 @@ class ApiConsumerUpdateRequest extends FormRequest
             'id.required'    => $idMessage,
             'id.numeric'     => $idMessage,
             'id.model_match' => $idMessage,
-            'email.required' => 'A valid email address is required.',
-            'email.email'    => 'The email address provided is not a valid email address.',
-            'email.unique'   => 'The email address provided is already in use.',
-            'level.required' => 'The API Access Level is required.',
-            'level.numeric'  => 'The API Access Level must be numeric',
-            'level.between'  => 'The API Access Level must be a number between 0 and 9'
+            'email.unique'   => 'This email address is already connected to an API Account.'
         ];
     }
 }

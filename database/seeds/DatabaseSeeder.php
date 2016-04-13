@@ -5,6 +5,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class DatabaseSeeder extends Seeder
 {
+
     /**
      * Run the database seeds.
      *
@@ -19,5 +20,8 @@ class DatabaseSeeder extends Seeder
 
         $this->call(ApiConsumerTableSeeder::class);
         $this->command->info('Api Consumers table seeded!');
+
+        $this->call(BouncerConnectionsSeeder::class);
+        $this->command->info('Bouncer Connections seeded!');
     }
 }

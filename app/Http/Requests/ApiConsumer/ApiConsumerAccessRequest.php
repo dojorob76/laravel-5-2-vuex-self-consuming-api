@@ -38,9 +38,7 @@ class ApiConsumerAccessRequest extends FormRequest
     public function messages()
     {
         return [
-            'email.required'                  => 'The email address associated with your API account is required.',
-            'email.email'                     => 'The email address provided is not a valid email address.',
-            'email.exists'                    => 'The email address provided is not associated with an API account.',
+            'email.exists'                    => 'This email is not associated with an API account.',
             'api_token.required'              => 'Your API Access Token is required.',
             'api_token.valid_api_credentials' => 'These API credentials do not match our records.'
         ];

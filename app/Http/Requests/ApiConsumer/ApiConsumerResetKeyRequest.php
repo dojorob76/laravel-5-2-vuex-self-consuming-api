@@ -29,4 +29,16 @@ class ApiConsumerResetKeyRequest extends FormRequest
         ];
     }
 
+    public function messages()
+    {
+        // The consumer_id field is hidden, so if anything fails validation, return a generic message
+        $message = 'We are unable to process your request at this time. Please refresh the page and try again.';
+
+        return [
+            'consumer_id:required' => $message,
+            'consumer_id:numeric' => $message,
+            'consumer_id:exists' => $message
+        ];
+    }
+
 }

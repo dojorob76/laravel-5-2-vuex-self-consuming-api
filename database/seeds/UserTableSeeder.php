@@ -15,6 +15,7 @@ class UserTableSeeder extends Seeder
     {
         DB::table('users')->delete();
 
+        // Create the Admin User
         User::create([
             'name'      => 'My App Admin',
             'email'     => env('ADMIN_EMAIL'),
@@ -22,6 +23,7 @@ class UserTableSeeder extends Seeder
             'token_key' => 'placeholderactualcsrfwillbeprovidedonfirstlogin'
         ]);
 
+        // Create the System User
         User::create([
             'name'      => 'My App Info',
             'email'     => env('SYSTEM_EMAIL'),
