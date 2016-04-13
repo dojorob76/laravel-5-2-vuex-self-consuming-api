@@ -1,2 +1,12 @@
-// @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+// Pre-process Overrides
+@import "elements/colors"; // Needed for Bootstrap Pre-process Overrides
+@import "overrides/bootstrap-overrides";
 
+// Bring in Boostrap
+@import "../../../vendor/bower_components/bootstrap-sass/assets/stylesheets/bootstrap";
+
+// Post-process Overrides
+@import "overrides/directory-path-overrides";
+
+// Inline-Styling Helpers
+@import "helpers";
