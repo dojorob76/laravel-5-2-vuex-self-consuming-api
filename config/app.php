@@ -167,6 +167,13 @@ return [
         Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
         Barryvdh\Cors\ServiceProvider::class,
 
+        /*
+         * Custom Service Providers...
+         */
+        App\Providers\RepositoryServiceProvider::class,
+        App\Providers\ViewComposerServiceProvider::class,
+        App\Providers\ValidatorServiceProvider::class,
+
     ],
 
     /*

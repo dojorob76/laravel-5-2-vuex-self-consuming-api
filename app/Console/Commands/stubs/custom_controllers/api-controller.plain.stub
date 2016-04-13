@@ -1,0 +1,33 @@
+<?php
+
+namespace DummyNamespace;
+
+use DummyRootNamespaceHttp\Requests;
+use App\Utilities\JwTokenManager;
+use DummyRootNamespaceHttp\Controllers\BaseController;
+
+class DummyClass extends BaseController
+{
+
+    /**
+     * Construct a new API Controller instance.
+     *
+     * @param JwTokenManager $jwTokenManager
+     */
+    public function __construct(JwTokenManager $jwTokenManager)
+    {
+        parent::__construct($jwTokenManager);
+    }
+
+    /**
+     * Determine what kind of object we received from the Model Service and return the appropriate API Response.
+     *
+     * @param mixed $model
+     * @return \Dingo\Api\Http\Response|void
+     */
+    private function setApiResponse($model)
+    {
+        //return $this->getApiResponse($model, new ModelNameTransformer);
+    }
+
+}

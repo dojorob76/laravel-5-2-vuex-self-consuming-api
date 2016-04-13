@@ -1,0 +1,21 @@
+<?php
+
+namespace DummyNamespace;
+
+use DummyRootNamespaceHttp\Requests;
+use App\Utilities\JwTokenManager;
+
+class DummyClass extends BaseController
+{
+
+    /**
+     * Construct a new Web App Controller instance.
+     *
+     * @param JwTokenManager $jwTokenManager
+     */
+    public function __construct(JwTokenManager $jwTokenManager)
+    {
+        parent::__construct($jwTokenManager);
+    }
+
+}

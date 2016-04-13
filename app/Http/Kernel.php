@@ -6,6 +6,7 @@ use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
 {
+
     /**
      * The application's global HTTP middleware stack.
      *
@@ -15,6 +16,7 @@ class Kernel extends HttpKernel
      */
     protected $middleware = [
         \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
+        \Barryvdh\Cors\HandleCors::class,
     ];
 
     /**
@@ -44,10 +46,13 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $routeMiddleware = [
-        'auth' => \App\Http\Middleware\Authenticate::class,
+        'auth'       => \App\Http\Middleware\Authenticate::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
-        'can' => \Illuminate\Foundation\Http\Middleware\Authorize::class,
-        'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
-        'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+        'can'        => \Illuminate\Foundation\Http\Middleware\Authorize::class,
+        'guest'      => \App\Http\Middleware\RedirectIfAuthenticated::class,
+        'throttle'   => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+        'api.access' => \App\Http\Middleware\ApiAccessToken::class,
+        'api.admin'  => \App\Http\Middleware\ApiAdminToken::class,
+        'api.owner'  => \App\Http\Middleware\ApiConsumerIsOwner::class,
     ];
 }

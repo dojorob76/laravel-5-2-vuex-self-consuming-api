@@ -11,7 +11,7 @@
         <meta name="app-main" id="app-main" content="{{env('APP_MAIN')}}">
         <meta name="url-protocol" id="url-protocol" content="{{env('URL_PROTOCOL')}}">
 
-        <title></title>
+        <title>@if(isset($page_title)){{$page_title}}@else{{$site_name}}@endif</title>
 
         <!-- Favicon -->
         <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
