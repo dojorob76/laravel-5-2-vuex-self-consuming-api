@@ -191,4 +191,47 @@ class ApiTokenManager
 
         return $token;
     }
+
+    /**
+     * Store the human-readable, valid API Access Token in the session so that it may be converted to a valid web access
+     * token to be used on future requests, but does not interfere with accessibility in the meantime.
+     *
+     * @param string $token
+     */
+    public function setPreWebAccessToken($token)
+    {
+        // First, remove previous (no longer valid) WebAccessToken from session if it exists
+        if (session()->has('api_consumer_token')) {
+            session()->pull('api_consumer_token');
+        }
+        // Set the PreWebAccessToken in the session
+        session()->put('consumer_token', $token);
+    }
+
+    /**
+     * Set a validatable WebAccessToken that an API Consumer can access the WEB APP with in the session.
+     * @param null|string $token
+     */
+    public function setValidWebAccessToken($token = null)
+    {
+        // Check for the PreWebAccessToken
+        if (session()->has('consumer_token')) {
+            // Remove the PreWebAccessToken
+            $requestToken = session()->pull('consumer_token');
+        } else {
+            $requestToken = $token;
+        }
+        // Set the validatable WebAccessToken
+        session()->put('api_consumer_token', $requestToken);
+    }
+
+    /**
+     * Remove a WebAccessToken from an ApiConsumer's session.
+     */
+    public function removeWebAccessToken()
+    {
+        if (session()->has('api_consumer_token')) {
+            session()->pull('api_consumer_token');
+        }
+    }
 }

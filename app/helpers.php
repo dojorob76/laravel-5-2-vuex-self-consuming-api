@@ -114,27 +114,6 @@ function getCapturedRequest()
 }
 
 /**
- * Get the correct path for a route based on which subdomain we are currently in.
- *
- * @param string $route
- * @param null $request
- * @return string
- */
-function getPathForSubdomain($route, $request = null)
-{
-    // If a request object was not provided, capture the request
-    if ($request == null) {
-        $request = getCapturedRequest();
-    }
-    // Get the subdomain that we are currently in
-    $subdomain = getSubdomain($request);
-    // If we are not in a subdomain, return the route, otherwise prepend the subdomain + '-' to the route
-    $path = !$subdomain ? $route : $subdomain . '-' . $route;
-
-    return $path;
-}
-
-/**
  * Determine whether the correct variable type has been provided to a method, and return false if it has or return a
  * JsonResponse customized error message if it has not.
  *

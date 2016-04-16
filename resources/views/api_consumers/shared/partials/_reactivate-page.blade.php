@@ -1,11 +1,6 @@
 @if(isset($errors) && count($errors) > 0)
-    <div class="alert alert-danger">
-        <p class="text-center">
-            <span class="bold">Security Error:</span> The API Access Token has been compromised and was not activated.
-            @foreach ($errors->all() as $error)
-            {!! $error !!},
-            @endforeach
-        </p>
+    <div class="alert alert-danger text-center">
+        <strong>Security Error:</strong> The API Access Token has been compromised and was not activated.
     </div>
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <p class="text-center">

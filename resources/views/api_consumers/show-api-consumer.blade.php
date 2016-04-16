@@ -37,15 +37,16 @@
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <ul class="list-inline text-center">
                             <li class="mb10">
-                                <a class="btn btn-warning" href="{{action('ApiConsumerController@getLogout')}}">
-                                    Log Out of API Account
-                                </a>
+                                @include('api_consumers.partials._logout-button')
                             </li>
                             <li>
-                                <a class="btn btn-danger"
-                                   href="{{action('ApiConsumerController@destroy', $api_consumer)}}">
-                                    Delete API Account
-                                </a>
+                                <form id="delete-api-consumer-form"
+                                      method="post"
+                                      action="{{action('ApiConsumerController@destroy', $api_consumer)}}"
+                                      data-modal-text="API Account"
+                                >
+                                    @include('global.partials._delete-button', ['dlt_btn_txt' => 'Delete API Account'])
+                                </form>
                             </li>
                         </ul>
                     </div>
@@ -55,4 +56,9 @@
             </div>
         </div>
     </div>
+    @include('global.modals.delete-modal')
+@endsection
+
+@section('postscripts')
+    @include('global.scripts.delete-script')
 @endsection

@@ -40,6 +40,7 @@
     <body>
         <div class="container">
             <div class="content">
+                @include('global.partials._flash-messages')
                 <div class="title">Tsk Tsk Tsk... You Can't Do That!</div>
             </div>
         </div>

@@ -4,5 +4,21 @@
       action="{{action('Admin\AdminApiConsumerController@store')}}"
       id="admin-create-api-consumer-form"
 >
-    @include('api_consumers.shared.forms._create-api-consumer-form-fields')
+    {{csrf_field()}}
+    <div class="form-inline text-center">
+        <div class="form-group" id="create-api-consumer-email">
+            <label for="email">Email</label>
+            <input type="email"
+                   name="email"
+                   value="{{session('email_address')}}"
+                   placeholder="Enter a Valid Email Address"
+                   class="form-control"
+                   style="min-width: 300px;"
+            >
+            <button type="submit" class="btn btn-primary">Generate Token</button>
+            <div class="errlist create-api-consumer-email-error-msg rounded">
+                <ul class="mb0"></ul>
+            </div>
+        </div>
+    </div>
 </form>

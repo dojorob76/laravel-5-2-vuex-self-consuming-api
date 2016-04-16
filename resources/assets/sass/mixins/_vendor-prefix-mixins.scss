@@ -1,0 +1,11 @@
+@mixin animation-settings($duration, $delay, $iteration){
+    -webkit-animation-duration: $duration;
+    -webkit-animation-delay: $delay;
+    -webkit-animation-iteration-count: $iteration;
+    -moz-animation-duration: $duration;
+    -moz-animation-delay: $delay;
+    -moz-animation-iteration-count: $iteration;
+    -o-animation-duration: $duration;
+    -o-animation-delay: $delay;
+    -o-animation-iteration-count: $iteration;
+}

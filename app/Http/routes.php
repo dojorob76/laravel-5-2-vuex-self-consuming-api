@@ -17,8 +17,6 @@ Route::resource('api-consumer', 'ApiConsumerController', ['except' => 'edit']);
 
 
 Route::get('test', function () {
-    $user = \App\User::find(1);
-    $abilities = $user->getAbilities();
 
-    dd($abilities);
+    return Session::all();
 });
