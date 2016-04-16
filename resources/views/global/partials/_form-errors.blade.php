@@ -1,7 +1,7 @@
 <!-- (NON-AJAX) Form Errors -->
 @if(isset($errors))
     @if (count($errors) > 0)
-        <div class="alert alert-danger">
+        <div class="alert alert-danger error-msgs">
             <strong>Whoops!</strong> There were some problems with your input.<br><br>
             <ul>
                 @foreach ($errors->all() as $error)

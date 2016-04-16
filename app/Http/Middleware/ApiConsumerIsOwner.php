@@ -37,10 +37,12 @@ class ApiConsumerIsOwner
 
         // If no token is present or a valid user can not be retrieved from the token, return the error response
         if (!$token || !$user = $this->apiTokenManager->getApiConsumerFromToken($token)) {
+            // Remove any possible invalid WebTokens
+            $this->apiTokenManager->removeWebAccessToken();
             abort(403, $response);
         }
         // If the ApiConsumer retrieved from the token is not the system admin, or the page owner (based on the 2nd
-        // route segment, i.e., 'api-consumer/3' where 3 is the 2nd segment), return the error response
+        // route segment, i.e., 'api-consumer/17' where '17' is the 2nd segment), return the error response
         if (!$this->apiTokenManager->verifyAdminToken($token) && $user->id != $request->segment(2)) {
             abort(403, $response);
         }

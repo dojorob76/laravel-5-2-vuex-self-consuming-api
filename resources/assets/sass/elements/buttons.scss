@@ -1,0 +1,20 @@
+.btn-wait-content{
+    @extend .hide-it;
+    &.show-me{
+        @extend .show-it;
+    }
+}
+
+.btn-wait-icon, .btn-wait-text{
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+}
+
+.btn-wait-icon{
+    @include animation-settings(2s, 0s, infinite);
+}
+
+.btn-wait-text{
+    @include animation-settings(2.5s, 0.5s, infinite);
+}

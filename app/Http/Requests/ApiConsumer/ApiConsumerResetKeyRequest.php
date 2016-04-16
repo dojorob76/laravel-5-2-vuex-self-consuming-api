@@ -25,19 +25,20 @@ class ApiConsumerResetKeyRequest extends FormRequest
     public function rules()
     {
         return [
-            'consumer_id' => 'required|numeric|exists:api_consumers,id'
+            'consumer_id' => 'required|numeric|exists:api_consumers,id|model_match:' . $this->segment(2)
         ];
     }
 
     public function messages()
     {
         // The consumer_id field is hidden, so if anything fails validation, return a generic message
-        $message = 'We are unable to process your request at this time. Please refresh the page and try again.';
+        $message = 'A reset key could not be created. Please refresh the page and try again.';
 
         return [
-            'consumer_id:required' => $message,
-            'consumer_id:numeric' => $message,
-            'consumer_id:exists' => $message
+            'consumer_id.required'    => $message,
+            'consumer_id.numeric'     => $message,
+            'consumer_id.exists'      => $message,
+            'consumer_id.model_match' => $message
         ];
     }
 

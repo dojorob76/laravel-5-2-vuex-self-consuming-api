@@ -233,11 +233,11 @@ class BaseController extends Controller
      */
     private function getApiResponseFromJson(JsonResponse $json)
     {
-        $status = $json->getStatusCode();
+        $info = getJsonInfoArray($json);
+        $status = $info['status'];
 
         if ($status >= 400) {
             // We have received an error JsonResponse from the Model Service
-            $info = $json->getData('message');
             $message = $info['message'];
 
             return $this->response->error($message, $status);

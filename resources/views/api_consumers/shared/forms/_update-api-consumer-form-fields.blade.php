@@ -1,7 +1,11 @@
 <!-- Shared Fields for the Update API Consumer Form -->
 {{ method_field('PUT') }}
 {{ csrf_field() }}
-<input type="hidden" name="id" value="{{$api_consumer->id}}">
+<!-- (HIDDEN) ID Field -->
+<div class="form-group" id="update-api-consumer-id">
+    <input type="hidden" name="id" value="{{$api_consumer->id}}">
+    <div class="errlist update-api-consumer-id-error-msg"><ul class="mb0"></ul></div>
+</div>
 <!-- Email Field -->
 <div class="form-group" id="update-api-consumer-email">
     <label for="email">Email</label>

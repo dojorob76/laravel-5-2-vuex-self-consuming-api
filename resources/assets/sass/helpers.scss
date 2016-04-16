@@ -1,9 +1,14 @@
 //-------------------------------------------------------------------------------------------------------------------
-// This file contains various page style helpers for use in inline styling
+// This file contains various page style helpers for use with inline styling
 //-------------------------------------------------------------------------------------------------------------------
+
+// ---------- VISIBILITY ----------
+.invisible { @extend .hide-it; }
+
 
 // ---------- TEXT ----------
 .bold { font-weight: 700; }
+
 
 // ---------- MARGINS ----------
 .m0 { margin: 0; }
@@ -66,12 +71,6 @@
 
 .mlm5 { margin-left: -5px; }
 
-// Inline Lists with no indentation
-.no-indent {
-    -webkit-margin-before: 0 !important;
-    -webkit-margin-after: 0 !important;
-    -webkit-padding-start: 5px !important;
-}
 
 // ---------- PADDING ---------
 .p0 { padding: 0; }
@@ -113,3 +112,12 @@
 .pb20 { padding-bottom: 20px; }
 
 .pl20 { padding-left: 20px; }
+
+
+// ---------- LISTS ---------
+// Inline Lists with no indentation
+.no-indent {
+    -webkit-margin-before: 0 !important;
+    -webkit-margin-after: 0 !important;
+    -webkit-padding-start: 5px !important;
+}

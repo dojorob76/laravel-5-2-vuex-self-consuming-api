@@ -11,6 +11,7 @@ use App\Http\Requests\ApiConsumer\ApiConsumerRequest;
 use App\Http\Requests\ApiConsumer\ApiConsumerUpdateRequest;
 use App\Http\Requests\ApiConsumer\ApiConsumerResetKeyRequest;
 use App\Http\Requests\ApiConsumer\ApiConsumerActivationRequest;
+use App\Http\Requests\ApiConsumer\ApiConsumerReactivationRequest;
 use App\Http\Requests\ApiConsumer\ApiConsumerRefreshTokenRequest;
 
 class ApiApiConsumerController extends BaseController
@@ -62,6 +63,18 @@ class ApiApiConsumerController extends BaseController
     public function activate(ApiConsumerActivationRequest $request)
     {
         return $this->setApiResponse($this->apiConsumerService->activateValidApiConsumer($request->all()));
+    }
+
+    /**
+     * Attempt to retrieve an ApiConsumer by the email provided in the reactivation form or return a DingoAPI (void)
+     * error response.
+     *
+     * @param ApiConsumerReactivationRequest $request
+     * @return \Dingo\Api\Http\Response|void
+     */
+    public function reactivate(ApiConsumerReactivationRequest $request)
+    {
+        return $this->setApiResponse($this->apiConsumerService->reactivateApiConsumer($request->all()));
     }
 
     /**

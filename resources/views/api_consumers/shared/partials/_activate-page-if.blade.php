@@ -1,6 +1,8 @@
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
     <p class="text-center">
-        <span class="bold dkred">IMPORTANT:</span> <em>This token will only be displayed once!</em>
+        <span style="color: #a94442;">
+            <strong>IMPORTANT:</strong> <em>This token will only be displayed once!</em>
+        </span>
     </p>
     <p class="text-center">
         Please copy it now, and store it in a safe place. Once you have successfully copied and stored the token, click
@@ -16,7 +18,8 @@
                    readonly
             >
             <a class="btn btn-primary clipboard" data-clipboard-target="#access-token-once">
-                <i class="fa fa-clipboard"></i><span class="sr-only">Copy token to clipboard</span>
+                <span class="glyphicon glyphicon-copy"></span>
+                <span class="sr-only">Copy token to clipboard</span>
             </a>
             <label class="label label-info clipboard-result"></label>
         </div>

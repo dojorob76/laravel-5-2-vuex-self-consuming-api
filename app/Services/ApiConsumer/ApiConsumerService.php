@@ -200,7 +200,18 @@ class ApiConsumerService
         // Make sure we received the correct input type
         miscastVar('string', $email, 'the email address of a new Api Consumer');
 
-        // If we received the correct input type, get fresh data for the ApiConsumer
+        // If this email address is from an ApiConsumer who is not yet active, we will need to update instead of create
+        $apiConsumer = $this->getApiConsumerByEmail($email);
+        if ($apiConsumer instanceof ApiConsumer) {
+            if ($apiConsumer->level == 0 && $this->apiTokenManager->getTokenStatus($apiConsumer->api_token) == 'starter') {
+                // This is an ApiConsumer who has not activated their token, so send them through that process now
+                return $this->updateApiConsumerToken(['email' => $email]);
+            }
+
+            // This is an existing, active ApiConsumer who never should have hit this method in the 1st place...
+            return response()->json(['message' => 'This API Account is already active.'], 422);
+        }
+        // Otherwise, get fresh data for the new ApiConsumer
         $data = $this->getFreshApiConsumerData($email);
         // Attempt to create the new ApiConsumer with the data
         $newConsumer = $this->createNewApiConsumer($data);
@@ -268,6 +279,23 @@ class ApiConsumerService
         }
 
         // We do not have a valid ApiConsumer, so return JsonResponse error
+        return $apiConsumer;
+    }
+
+    /**
+     * Attempt to retrieve and return an existing ApiConsumer by the email address provided in the reactivation form
+     * or return JsonResponse error.
+     *
+     * @param array $data
+     * @return ApiConsumer|JsonResponse
+     */
+    public function reactivateApiConsumer($data)
+    {
+        // Make sure we received the correct input type
+        miscastVar('array', $data, 'Api Consumer reactivation request data');
+
+        $apiConsumer = $this->getApiConsumerByEmail($data['email']);
+
         return $apiConsumer;
     }
 

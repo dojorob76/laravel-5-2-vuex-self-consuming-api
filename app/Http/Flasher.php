@@ -11,7 +11,7 @@ class Flasher
      * @param string $title
      * @param string $message
      * @param string $level (One of: 'success', 'info', 'warning', 'error')
-     * @param string $type (One of: 'vue_flash', 'vue_dismiss', 'vue_timed')
+     * @param string $type (One of: 'bs_flash', 'bs_dismiss', 'bs_timed')
      * @return mixed
      */
     public function flashMessage($message, $title, $level, $type)
@@ -32,7 +32,7 @@ class Flasher
      */
     public function message($message, $title = 'Alert')
     {
-        return $this->flashMessage($message, $title, 'info', 'vue_flash');
+        return $this->flashMessage($message, $title, 'info', 'bs_flash');
     }
 
     /**
@@ -44,162 +44,102 @@ class Flasher
      */
     public function messageDismiss($message, $title = 'Alert')
     {
-        return $this->flashMessage($message, $title, 'info', 'vue_dismiss');
+        return $this->flashMessage($message, $title, 'info', 'bs_dismiss');
     }
 
     /**
-     * Default TIMED Alert Message.
-     *
-     * @param $message
-     * @param string $title
-     * @return mixed
-     */
-    public function messageTimed($message, $title = 'Alert')
-    {
-        return $this->flashMessage($message, $title, 'info', 'vue_timed');
-    }
-
-    /**
-     * Return an 'INFO' level VueStrap Alert style message to the session.
+     * Return an 'INFO' level Bootstrap Alert style message to the session.
      *
      * @param $title
      * @param $message
      * @return mixed
      */
-    public function vueInfo($message, $title = 'FYI')
+    public function bsInfo($message, $title = 'FYI')
     {
-        return $this->flashMessage($message, $title, 'info', 'vue_flash');
+        return $this->flashMessage($message, $title, 'info', 'bs_flash');
     }
 
     /**
-     * Return a DISMISSABLE 'INFO' level VueStrap Alert style message to the session.
+     * Return a DISMISSABLE 'INFO' level Bootstrap Alert style message to the session.
      *
      * @param $title
      * @param $message
      * @return mixed
      */
-    public function vueInfoDismiss($message, $title = 'FYI')
+    public function bsInfoDismiss($message, $title = 'FYI')
     {
-        return $this->flashMessage($message, $title, 'info', 'vue_dismiss');
+        return $this->flashMessage($message, $title, 'info', 'bs_dismiss');
     }
 
     /**
-     * Return a TIMED 'INFO' level VueStrap Alert style message to the session.
+     * Return a 'SUCCESS' level Bootstrap Alert style message to the session.
      *
      * @param $title
      * @param $message
      * @return mixed
      */
-    public function vueInfoTimed($message, $title = 'FYI')
+    public function bsSuccess($message, $title = 'Success!')
     {
-        return $this->flashMessage($message, $title, 'info', 'vue_timed');
+        return $this->flashMessage($message, $title, 'success', 'bs_flash');
     }
 
     /**
-     * Return a 'SUCCESS' level VueStrap Alert style message to the session.
+     * Return a DISMISSABLE 'SUCCESS' level Bootstrap Alert style message to the session.
      *
      * @param $title
      * @param $message
      * @return mixed
      */
-    public function vueSuccess($message, $title = 'Success!')
+    public function bsSuccessDismiss($message, $title = 'Success!')
     {
-        return $this->flashMessage($message, $title, 'success', 'vue_flash');
+        return $this->flashMessage($message, $title, 'success', 'bs_dismiss');
     }
 
     /**
-     * Return a DISMISSABLE 'SUCCESS' level VueStrap Alert style message to the session.
+     * Return a 'WARNING' level Bootstrap Alert style message to the session.
      *
      * @param $title
      * @param $message
      * @return mixed
      */
-    public function vueSuccessDismiss($message, $title = 'Success!')
+    public function bsWarning($message, $title = 'Warning!')
     {
-        return $this->flashMessage($message, $title, 'success', 'vue_dismiss');
+        return $this->flashMessage($message, $title, 'warning', 'bs_flash');
     }
 
     /**
-     * Return a TIMED 'SUCCESS' level VueStrap Alert style message to the session.
+     * Return a DISMISSABLE 'WARNING' level Bootstrap Alert style message to the session.
      *
      * @param $title
      * @param $message
      * @return mixed
      */
-    public function vueSuccessTimed($message, $title = 'Success!')
+    public function bsWarningDismiss($message, $title = 'Warning!')
     {
-        return $this->flashMessage($message, $title, 'success', 'vue_timed');
+        return $this->flashMessage($message, $title, 'warning', 'bs_dismiss');
     }
 
     /**
-     * Return a 'WARNING' level VueStrap Alert style message to the session.
+     * Return an 'ERROR' level Bootstrap Alert style message to the session.
      *
      * @param $title
      * @param $message
      * @return mixed
      */
-    public function vueWarning($message, $title = 'Warning!')
+    public function bsError($message, $title = 'Error!')
     {
-        return $this->flashMessage($message, $title, 'warning', 'vue_flash');
+        return $this->flashMessage($message, $title, 'danger', 'bs_flash');
     }
 
     /**
-     * Return a DISMISSABLE 'WARNING' level VueStrap Alert style message to the session.
+     * Return a DISMISSABLE 'ERROR' level Bootstrap Alert style message to the session.
      *
      * @param $title
      * @param $message
      * @return mixed
      */
-    public function vueWarningDismiss($message, $title = 'Warning!')
+    public function bsErrorDismiss($message, $title = 'Error!')
     {
-        return $this->flashMessage($message, $title, 'warning', 'vue_dismiss');
-    }
-
-    /**
-     * Return a TIMED 'WARNING' level VueStrap Alert style message to the session.
-     *
-     * @param $title
-     * @param $message
-     * @return mixed
-     */
-    public function vueWarningTimed($message, $title = 'Warning!')
-    {
-        return $this->flashMessage($message, $title, 'warning', 'vue_timed');
-    }
-
-    /**
-     * Return an 'ERROR' level VueStrap Alert style message to the session.
-     *
-     * @param $title
-     * @param $message
-     * @return mixed
-     */
-    public function vueError($message, $title = 'Error!')
-    {
-        return $this->flashMessage($message, $title, 'danger', 'vue_flash');
-    }
-
-    /**
-     * Return a DISMISSABLE 'ERROR' level VueStrap Alert style message to the session.
-     *
-     * @param $title
-     * @param $message
-     * @return mixed
-     */
-    public function vueErrorDismiss($message, $title = 'Error!')
-    {
-        return $this->flashMessage($message, $title, 'danger', 'vue_dismiss');
-    }
-
-    /**
-     * Return a TIMED 'ERROR' level VueStrap Alert style message to the session.
-     *
-     * @param $title
-     * @param $message
-     * @return mixed
-     */
-    public function vueErrorTimed($message, $title = 'Error!')
-    {
-        return $this->flashMessage($message, $title, 'danger', 'vue_timed');
+        return $this->flashMessage($message, $title, 'danger', 'bs_dismiss');
     }
 }

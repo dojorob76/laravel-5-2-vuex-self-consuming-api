@@ -16,6 +16,28 @@ class ApiConsumerValidator
     }
 
     /**
+     * Extends validator to check for unique email addresses, except in the case of ApiConsumers that have not yet
+     * been activated.
+     *
+     * @param $attribute
+     * @param $value
+     * @param $parameters
+     * @param $validator
+     * @return bool
+     */
+    public function uniqueIfActive($attribute, $value, $parameters, $validator)
+    {
+        $aC = ApiConsumer::where('email', $value)->first();
+
+        if ($aC instanceof ApiConsumer) {
+            // If the ApiConsumer instance has a starter token, and is level 0, it is not active yet
+            return $this->apiTokenManager->getTokenStatus($aC->api_token) == 'starter' && $aC->level == 0;
+        }
+
+        return true;
+    }
+
+    /**
      * Extends Validator to check that the ApiConsumer ID in the 'activate-api-consumer' form matches the ID appended
      * to the human-readable Starter Token.
      *
@@ -28,7 +50,7 @@ class ApiConsumerValidator
     public function tokenId($attribute, $value, $parameters, $validator)
     {
         // Get the token info array from the token provided in the form
-        $tokenInfo = $this->apiTokenManager->getTokenInfoFromForm($value);
+        $tokenInfo = $this->apiTokenManager->getTokenInfoArray($value);
         // Get the ApiConsumer ID that was provided in the form
         $id = $parameters[0];
 
@@ -49,7 +71,7 @@ class ApiConsumerValidator
     public function tokenSize($attribute, $value, $parameters, $validator)
     {
         // Get the token info array from the token provided in the form
-        $tokenInfo = $this->apiTokenManager->getTokenInfoFromForm($value);
+        $tokenInfo = $this->apiTokenManager->getTokenInfoArray($value);
 
         // If the starter token portion of the provided token is the correct length, return true, else return false
         return $this->apiTokenManager->getTokenStatus($tokenInfo['starter_token']) == 'starter';
@@ -70,7 +92,7 @@ class ApiConsumerValidator
         // Get the ApiConsumer from the 'api_consumer_id' form field value
         $aC = ApiConsumer::find($value);
         // Get the token info array from the token provided in the form
-        $tokenInfo = $this->apiTokenManager->getTokenInfoFromForm($parameters[0]);
+        $tokenInfo = $this->apiTokenManager->getTokenInfoArray($parameters[0]);
 
         // If the ApiConsumer exists and their starter token matches the starter token portion of the token provided in
         // the form, return true, otherwise return false

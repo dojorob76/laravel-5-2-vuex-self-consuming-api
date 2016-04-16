@@ -1,141 +1,4 @@
 @charset "UTF-8";
-.beige {
-  color: #fafafa; }
-
-.beige-bg {
-  background-color: #fafafa; }
-
-.off-white {
-  color: #fcfcfc; }
-
-.off-white-bg {
-  background-color: #fcfcfc; }
-
-.ltblue {
-  color: #3c9dd0; }
-
-.ltblue-bg {
-  background-color: #3c9dd0; }
-
-.mdblue {
-  color: #20437b; }
-
-.mdblue-bg {
-  background-color: #20437b; }
-
-.dkblue {
-  color: #0f2066; }
-
-.dkblue-bg {
-  background-color: #0f2066; }
-
-.ltred {
-  color: #d22c2a; }
-
-.ltred-bg {
-  background-color: #d22c2a; }
-
-.mdred {
-  color: #9a4350; }
-
-.mdred-bg {
-  background-color: #9a4350; }
-
-.dkred {
-  color: #8a0611; }
-
-.dkred-bg {
-  background-color: #8a0611; }
-
-.ltyellow {
-  color: #f1ddc4; }
-
-.ltyellow-bg {
-  background-color: #f1ddc4; }
-
-.mdyellow {
-  color: #ffc488; }
-
-.mdyellow-bg {
-  background-color: #ffc488; }
-
-.dkyellow {
-  color: #ffcb66; }
-
-.dkyellow-bg {
-  background-color: #ffcb66; }
-
-.yellowradial {
-  color: radial-gradient(circle at 50% 50%, #f1ddc4, #ffcb66); }
-
-.yellowradial-bg {
-  background: -webkit-radial-gradient(50% 50%, circle, #f1ddc4, #ffcb66);
-  background: radial-gradient(circle at 50% 50%, #f1ddc4, #ffcb66); }
-
-.ltgrey {
-  color: #898c83; }
-
-.ltgrey-bg {
-  background-color: #898c83; }
-
-.dkgrey {
-  color: #3a454c; }
-
-.dkgrey-bg {
-  background-color: #3a454c; }
-
-.blshd {
-  color: #1d1f48; }
-
-.blshd-bg {
-  background-color: #1d1f48; }
-
-.prplshd {
-  color: #362035; }
-
-.prplshd-bg {
-  background-color: #362035; }
-
-.facebook {
-  color: #3b5998; }
-  .facebook:hover {
-    color: #263961; }
-
-.twitter {
-  color: #00aced; }
-  .twitter:hover {
-    color: #0074a1; }
-
-.instagram {
-  color: #675144; }
-  .instagram:hover {
-    color: #392d26; }
-
-.linkedin {
-  color: #007bb6; }
-  .linkedin:hover {
-    color: #00476a; }
-
-.google {
-  color: #dd4b39; }
-  .google:hover {
-    color: #ac2d1e; }
-
-.youtube {
-  color: #bb0000; }
-  .youtube:hover {
-    color: #6f0000; }
-
-.vimeo {
-  color: #aad450; }
-  .vimeo:hover {
-    color: #83ad2b; }
-
-.twitch {
-  color: #6441a5; }
-  .twitch:hover {
-    color: #432b6e; }
-
 /*
 * This file holds the Bootstrap Pre-Processing overrides (for variables set as '!default').
 * Vendor CSS files need to respect the 'public/build/css/**' directory structure.
@@ -5905,16 +5768,80 @@ button.close {
   .hidden-print {
     display: none !important; } }
 
-/*
-* Vendor CSS files need to respect the 'public/build/css/**' directory structure.
-* This file holds all of the directory path overrides for vendor CSS files that have been loaded with gulp.
-*/
-@font-face {
-  font-family: 'FontAwesome';
-  src: url("../../fonts/fontawesome-webfont.eot?v=4.5.0");
-  src: url("../../fonts/fontawesome-webfont.eot?#iefix&v=4.5.0") format("embedded-opentype"), url("../../fonts/fontawesome-webfont.woff2?v=4.5.0") format("woff2"), url("../../fonts/fontawesome-webfont.woff?v=4.5.0") format("woff"), url("../../fonts/fontawesome-webfont.ttf?v=4.5.0") format("truetype"), url("../../fonts/fontawesome-webfont.svg?v=4.5.0#fontawesomeregular") format("svg");
-  font-weight: normal;
-  font-style: normal; }
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale; }
+
+.hide-it, .btn-wait-content, .errlist, .invisible {
+  visibility: hidden;
+  display: none;
+  opacity: 0;
+  width: 0;
+  height: 0; }
+
+.show-it, .btn-wait-content.show-me, .has-error .errlist {
+  visibility: visible;
+  display: block;
+  opacity: 1;
+  width: auto;
+  height: auto; }
+
+.btn-wait-icon, .btn-wait-text {
+  display: inline-block;
+  margin: 0;
+  padding: 0; }
+
+.btn-wait-icon {
+  -webkit-animation-duration: 2s;
+  -webkit-animation-delay: 0s;
+  -webkit-animation-iteration-count: infinite;
+  -moz-animation-duration: 2s;
+  -moz-animation-delay: 0s;
+  -moz-animation-iteration-count: infinite;
+  -o-animation-duration: 2s;
+  -o-animation-delay: 0s;
+  -o-animation-iteration-count: infinite; }
+
+.btn-wait-text {
+  -webkit-animation-duration: 2.5s;
+  -webkit-animation-delay: 0.5s;
+  -webkit-animation-iteration-count: infinite;
+  -moz-animation-duration: 2.5s;
+  -moz-animation-delay: 0.5s;
+  -moz-animation-iteration-count: infinite;
+  -o-animation-duration: 2.5s;
+  -o-animation-delay: 0.5s;
+  -o-animation-iteration-count: infinite; }
+
+.has-error .errlist {
+  color: #a94442;
+  text-align: left !important;
+  background-color: #f9f1f1;
+  border: 1px solid #a94442;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+  border-top: none;
+  margin-top: -1px; }
+  .has-error .errlist ul {
+    padding: 10px;
+    -webkit-padding-start: 20px;
+    margin-bottom: 0; }
+    .has-error .errlist ul li {
+      margin-right: 10px; }
+  .has-error .errlist.rounded, .has-error .errlist.inline {
+    border-radius: 4px;
+    border-top: 1px solid #a94442; }
+  .has-error .errlist.rounded {
+    margin-top: 0; }
+  .has-error .errlist.inline {
+    margin-top: 3px; }
+
+.has-error .form-control {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0; }
+
+.form-inline .has-error .form-control {
+  border-radius: 4px; }
 
 .bold {
   font-weight: 700; }
@@ -6009,11 +5936,6 @@ button.close {
 .mlm5 {
   margin-left: -5px; }
 
-.no-indent {
-  -webkit-margin-before: 0 !important;
-  -webkit-margin-after: 0 !important;
-  -webkit-padding-start: 5px !important; }
-
 .p0 {
   padding: 0; }
 
@@ -6073,5 +5995,10 @@ button.close {
 
 .pl20 {
   padding-left: 20px; }
+
+.no-indent {
+  -webkit-margin-before: 0 !important;
+  -webkit-margin-after: 0 !important;
+  -webkit-padding-start: 5px !important; }
 
 /*# sourceMappingURL=app.css.map */

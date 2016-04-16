@@ -31,6 +31,8 @@ class ApiAccessToken
     {
         // If a valid API Access Token is not present in the request, abort with error message
         if (!$request->has('api_access_token') || !$this->apiTokenManager->verifyApiToken($request->get('api_access_token'))) {
+            // Remove any possible invalid WebAccessTokens
+            $this->apiTokenManager->removeWebAccessToken();
             abort(401, 'Token Required');
         }
 

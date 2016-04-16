@@ -8,8 +8,7 @@
   "license": "MIT",
   "keywords": [
     "Bootstrap",
-    "jQuery",
-    "FontAwesome"
+    "jQuery"
   ],
   "homepage": "https://github.com/MovieMeetinghouse/cinefiles",
   "moduleType": [],
@@ -22,7 +21,6 @@
     "tests"
   ],
   "dependencies": {
-    "bootstrap-sass": "^3.3.6",
-    "font-awesome": "^4.5.0"
+    "bootstrap-sass": "^3.3.6"
   }
 }

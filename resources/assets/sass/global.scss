@@ -1,0 +1,24 @@
+//-------------------------------------------------------------------------------------------------------------------
+// This file contains all of the globally available styles for the project
+//-------------------------------------------------------------------------------------------------------------------
+
+* {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.hide-it{
+    visibility: hidden;
+    display: none;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.show-it{
+    visibility: visible;
+    display: block;
+    opacity: 1;
+    width: auto;
+    height: auto;
+}

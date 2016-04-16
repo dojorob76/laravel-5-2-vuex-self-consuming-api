@@ -56,8 +56,12 @@ class ApiConsumerController extends BaseController
     public function create()
     {
         $pageTitle = 'Create an API Account';
+        $apiConsumer = $this->apiConsumerWebService->getLoggedInApiConsumer();
 
-        return view('api_consumers.create-api-consumer')->with(['page_title' => $pageTitle]);
+        return view('api_consumers.create-api-consumer')->with([
+            'page_title' => $pageTitle,
+            'api_consumer' => $apiConsumer
+        ]);
     }
 
     /**
@@ -71,7 +75,7 @@ class ApiConsumerController extends BaseController
     {
         $apiConsumer = $this->apiPostRequest('api-consumer', $request->all());
 
-        return $this->apiConsumerWebService->getStarterTokenRoute($apiConsumer);
+        return $this->apiConsumerWebService->getStarterTokenResponse($request, $apiConsumer);
     }
 
     /**
@@ -82,8 +86,12 @@ class ApiConsumerController extends BaseController
     public function getActivate()
     {
         $pageTitle = 'Activate API Access Token';
+        $apiConsumer = $this->apiConsumerWebService->getLoggedInApiConsumer();
 
-        return view('api_consumers.activate-api-consumer')->with(['page_title' => $pageTitle]);
+        return view('api_consumers.activate-api-consumer')->with([
+            'page_title' => $pageTitle,
+            'api_consumer' => $apiConsumer
+        ]);
     }
 
     /**
@@ -97,7 +105,7 @@ class ApiConsumerController extends BaseController
     {
         $apiConsumer = $this->apiPostRequest('api-consumer/activate', $request->all());
 
-        return $this->apiConsumerWebService->getActivationRoute($apiConsumer);
+        return $this->apiConsumerWebService->getActivationResponse($request, $apiConsumer);
     }
 
     /**
@@ -108,8 +116,12 @@ class ApiConsumerController extends BaseController
     public function getReactivate()
     {
         $pageTitle = 'API Token Activation Error';
+        $apiConsumer = $this->apiConsumerWebService->getLoggedInApiConsumer();
 
-        return view('api_consumers.reactivate-api-consumer')->with(['page_title' => $pageTitle]);
+        return view('api_consumers.reactivate-api-consumer')->with([
+            'page_title' => $pageTitle,
+            'api_consumer' => $apiConsumer
+        ]);
     }
 
     /**
@@ -120,7 +132,9 @@ class ApiConsumerController extends BaseController
      */
     public function postReactivate(ApiConsumerReactivationRequest $request)
     {
-        return $this->apiConsumerWebService->getReactivationRoute($request->get('email'));
+        $apiConsumer = $this->apiPostRequest('api-consumer/reactivate', $request->all());
+
+        return $this->apiConsumerWebService->getReactivationResponse($request, $apiConsumer);
     }
 
     /**
@@ -150,7 +164,7 @@ class ApiConsumerController extends BaseController
     {
         $apiConsumer = $this->apiPostRequest('api-consumer/reset-key', $request->all());
 
-        return $this->apiConsumerWebService->getPublicResetKeyRoute($apiConsumer);
+        return $this->apiConsumerWebService->getPublicResetKeyResponse($request, $apiConsumer);
     }
 
     /**
@@ -164,7 +178,7 @@ class ApiConsumerController extends BaseController
     {
         $apiConsumer = $this->apiPostRequest('api-consumer/refresh-token', $request->all());
 
-        return $this->apiConsumerWebService->getStarterTokenRoute($apiConsumer);
+        return $this->apiConsumerWebService->getStarterTokenResponse($request, $apiConsumer);
     }
 
     /**
@@ -178,7 +192,7 @@ class ApiConsumerController extends BaseController
     {
         $apiConsumer = $this->apiPutRequest('api-consumer/' . $model->id, $request->all());
 
-        return $this->apiConsumerWebService->getUpdateRoute($apiConsumer);
+        return $this->apiConsumerWebService->getUpdateResponse($request, $apiConsumer);
     }
 
     /**
@@ -189,23 +203,22 @@ class ApiConsumerController extends BaseController
      */
     public function destroy($model)
     {
-        return $this->apiDeleteRequest('api-consumer/' . $model->id);
+        $deleted = $this->apiDeleteRequest('api-consumer/' . $model->id);
+
+        return $this->apiConsumerWebService->getDeleteResponse(getCapturedRequest(), $deleted);
     }
 
     /**
-     * Attempt to log an ApiConsumer in to the WEB APP, then redirect based on success or failure with appropriate
-     * feedback and session variables.
+     * Attempt to log an ApiConsumer in to the WEB APP, then redirect with feedback and session variables.
      *
      * @param ApiConsumerAccessRequest $request
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function accessWebApp(ApiConsumerAccessRequest $request)
     {
-        $apiConsumer = $this->apiConsumerWebService->logInToWebApp($request->all());
-
-        return $this->apiConsumerWebService->getWebAccessRoute($apiConsumer);
+        // If we hit this, the ApiConsumer has already been validated (via the FormRequest)
+        return $this->apiConsumerWebService->getLoginResponse($request);
     }
-
 
     /**
      * If an ApiConsumer is logged in to the WEB APP, log them out, then redirect to the Public API landing page.

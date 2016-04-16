@@ -21,6 +21,7 @@ $api->version('v1', [
     // Api Consumers (Create New, Activate, Reset/Refresh)
     $api->post('api-consumer', 'ApiApiConsumerController@store')->name('api-consumer.post');
     $api->post('api-consumer/activate', 'ApiApiConsumerController@activate')->name('api-consumer/activate.post');
+    $api->post('api-consumer/reactivate', 'ApiApiConsumerController@reactivate')->name('api-consumer/reactivate.post');
     $api->post('api-consumer/reset-key', 'ApiApiConsumerController@postResetKey')
         ->name('api-consumer/reset-key.post');
     $api->post('api-consumer/refresh-token', 'ApiApiConsumerController@refreshToken')

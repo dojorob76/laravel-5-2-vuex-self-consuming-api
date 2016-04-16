@@ -25,7 +25,7 @@ class ApiConsumerRequest extends FormRequest
     public function rules()
     {
         return [
-            'email' => 'required|email|unique:api_consumers'
+            'email' => 'required|email|unique_if_active'
         ];
     }
 
@@ -37,7 +37,7 @@ class ApiConsumerRequest extends FormRequest
     public function messages()
     {
         return [
-            'email.unique' => 'This email address is already connected to an API Account.',
+            'email.unique_if_active' => 'This email address is already connected to an active API Account.',
         ];
     }
 }
