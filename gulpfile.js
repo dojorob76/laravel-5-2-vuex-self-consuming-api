@@ -13,12 +13,7 @@ elixir(function (mix) {
 
         .scripts([
             paths.bower + 'jquery/dist/jquery.js',
-            paths.bootstrap + 'javascripts/bootstrap/alert.js', // <- For Bootstrap Alerts ONLY
-            paths.bootstrap + 'javascripts/bootstrap/modal.js', // <- For Bootstrap Modals ONLY
-            paths.bootstrap + 'javascripts/bootstrap/dropdown.js', // <- For Bootstrap Dropdowns ONLY
-            paths.bootstrap + 'javascripts/bootstrap/collapse.js', // <- For Bootstrap Collapse ONLY
-            paths.bootstrap + 'javascripts/bootstrap/tooltip.js', // <- For Bootstrap Collapse ONLY
-            //paths.bootstrap + 'javascripts/bootstrap.js', // <- Remove above and uncomment this for ALL Bootstrap JS
+            paths.bootstrap + 'javascripts/bootstrap.js',
             paths.vendor + 'js/cookies.js',
             'custom/**'
         ])

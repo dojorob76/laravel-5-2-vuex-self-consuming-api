@@ -29,12 +29,23 @@ class BouncerConnectionsSeeder extends Seeder
         $memberAbilities = ['do-member-actions'];
         $anonymousAbilities = ['do-anonymous-actions', 'login'];
 
-        // Declare the Admin Role abilities that are connected to models
+        // Declare the standard abilities that are connected to models
         $actions = ['create', 'view', 'edit', 'update', 'delete'];
 
+        // Declare the Admin Role basic abilities that are connected to models
         foreach ($actions as $action) {
             $this->bouncer->allow('admin')->to($action, User::class);
             $this->bouncer->allow('admin')->to($action, \App\ApiConsumer::class);
+        }
+        $systemApiAccountAbilities = [
+            'view-system-api-accounts',
+            'edit-system-api-accounts',
+            'delete-system-api-accounts'
+        ];
+
+        // Allow the admin role to manage the system API Accounts
+        foreach ($systemApiAccountAbilities as $ability) {
+            $this->bouncer->allow('admin')->to($ability, \App\ApiConsumer::class);
         }
 
         // Declare the Member Role abilities that are connected to models

@@ -2,9 +2,9 @@
 
 namespace App\Http\Middleware;
 
-use App\Utilities\RequestResponseUtilityTrait;
 use Closure;
 use Silber\Bouncer\Bouncer;
+use App\Utilities\RequestResponseUtilityTrait;
 
 class AdminSubdomain
 {
@@ -13,9 +13,6 @@ class AdminSubdomain
 
     protected $bouncer;
 
-    // The name of the admin subdomain (i.e., 'admin.myapp.com' where 'admin' is the name) - change as needed
-    protected $adminSubdomain = 'admin';
-
     // The initial landing page of the admin submdomain - change as needed
     protected $adminLanding = 'admin-dashboard';
 
@@ -23,7 +20,7 @@ class AdminSubdomain
     protected $accessAbility = 'access-admin-subdomain';
 
     /**
-     * AdminSubdomain Middleware constructor.
+     * AdminSubdomain constructor.
      *
      * @param Bouncer $bouncer
      */
@@ -51,14 +48,21 @@ class AdminSubdomain
                 abort(401, 'Only system administrators may access this page.');
             }
 
+            $appMain = env('URL_PROTOCOL') . env('APP_MAIN');
+
             if (strlen($route) > 1) {
+                // If this is an Auth Route, make sure the admin subdomain is stripped
+                if (in_array($route, $this->authRoutes)) {
+                    return $this->getRedirectResponseForRequest($route, 302, $request);
+                }
+
                 // If the route does not have the 'admin-' prefix, prepend it now
-                if($route != 'logout' && substr($route, 0, strlen($adminPrefix)) != $adminPrefix){
+                if (substr($route, 0, strlen($adminPrefix)) != $adminPrefix) {
                     return $this->getRedirectResponseForRequest($route, 302, $request);
                 }
             } else {
-                // We are trying to reach the Main App landing page, so ditch the admin subdomain now
-                return $this->getRedirectResponseForRequest(env('URL_PROTOCOL') . env('APP_MAIN'), 302, $request);
+                // We are trying to reach the Main App landing page, so strip the admin subdomain
+                return $this->getRedirectResponseForRequest($appMain, 302, $request);
             }
         }
 
