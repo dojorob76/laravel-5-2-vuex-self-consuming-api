@@ -7,30 +7,31 @@ use Session;
 use App\User;
 use Tymon\JWTAuth\JWTAuth;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use App\Services\Users\UserService;
 use Illuminate\Encryption\Encrypter;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
-use App\Repositories\User\UserRepositoryInterface;
 
 class JwTokenManager
 {
 
     protected $jwtAuth;
-    protected $userRepo;
+    protected $userService;
     protected $encrypter;
 
     /**
      * JwTokenManager constructor.
      *
      * @param JWTAuth $jwtAuth
-     * @param UserRepositoryInterface $userRepo
+     * @param UserService $userService
      * @param Encrypter $encrypter
      */
-    public function __construct(JWTAuth $jwtAuth, UserRepositoryInterface $userRepo, Encrypter $encrypter)
+    public function __construct(JWTAuth $jwtAuth, UserService $userService, Encrypter $encrypter)
     {
         $this->jwtAuth = $jwtAuth;
-        $this->userRepo = $userRepo;
+        $this->userService = $userService;
         $this->encrypter = $encrypter;
     }
 
@@ -43,27 +44,27 @@ class JwTokenManager
     public function getJwtFromUser(User $user)
     {
         // Make sure we are dealing with a valid User
-        if ($user instanceof User) {
-            // Get the User's encrypted token key to set as a custom claim (xsrfToken) on the JWT
-            $xsrf = $this->getXsrfFromUser($user);
-
-            // Attempt to generate a JWT from the User with the xsrfToken as a custom claim
-            try {
-                if (!$token = $this->jwtAuth->fromUser($user, $xsrf)) {
-                    // We were unable to generate the token from the User, return the error response
-                    return response()->json(['message' => 'Could not generate JWT from User'], 422);
-                }
-            } catch (JWTException $e) {
-                // Something went wrong during the attempt to encode the JWT, return the error response
-                return response()->json(['message' => $e->getMessage()], setStatus($e, 500));
-            }
-
-            // Return the token
-            return $token;
+        if (!$user instanceof User) {
+            // The User is not valid, return the error response
+            return response()->json(['message' => 'A valid User was not provided.'], 404);
         }
 
-        // The User is not valid, return the error response
-        return response()->json(['message' => 'This User does not exist'], 404);
+        // Get the User's encrypted token key to set as a custom claim (xsrfToken) on the JWT
+        $xsrf = $this->getXsrfFromUser($user);
+
+        // Attempt to generate a JWT from the User with the xsrfToken as a custom claim
+        try {
+            if (!$token = $this->jwtAuth->fromUser($user, $xsrf)) {
+                // We were unable to generate the token from the User, return the error response
+                return response()->json(['message' => 'Could not generate JWT from User'], 422);
+            }
+        } catch (JWTException $e) {
+            // Something went wrong during the attempt to encode the JWT, return the error response
+            return response()->json(['message' => $e->getMessage()], $e->getStatusCode());
+        }
+
+        // Return the token
+        return $token;
     }
 
     /**
@@ -76,25 +77,27 @@ class JwTokenManager
     public function refreshJwtFromUser($jwt, User $user)
     {
         // Make sure we are dealing with a valid User
-        if ($user instanceof User) {
-            // Reset the current app CSRF Token
-            Session::regenerateToken();
+        if (!$user instanceof User) {
+            return response()->json(['message' => 'A valid User was not provided.'], 404);
+        }
+        // Reset the current app CSRF Token
+        Session::regenerateToken();
 
-            // Update the User's 'token_key' column to reflect the new CSRF Token
-            $updatedUser = $this->userRepo->updateExisting($user->id, ['token_key' => csrf_token()]);
+        // Update the User's 'token_key' column to reflect the new CSRF Token
+        $updatedUser = $this->userService->updateUserTokenKey($user->id, csrf_token());
 
-            // Invalidate the current JWT
-            $this->jwtAuth->invalidate($jwt);
-
-            // Generate a new JWT from the updated User
-            $refreshed = $this->getJwtFromUser($updatedUser);
-
-            // Return the refreshed JWT
-            return $refreshed;
+        if ($updatedUser instanceof JsonResponse) {
+            return $updatedUser;
         }
 
-        // The User is not valid, return the error response
-        return response()->json(['message' => 'This User does not exist'], 404);
+        // Invalidate the current JWT
+        $this->jwtAuth->invalidate($jwt);
+
+        // Generate a new JWT from the updated User
+        $refreshed = $this->getJwtFromUser($updatedUser);
+
+        // Return the refreshed JWT
+        return $refreshed;
     }
 
     /**
@@ -113,13 +116,13 @@ class JwTokenManager
             }
         } catch (TokenExpiredException $e) {
             // The token has expired, return the error response
-            return response()->json(['message' => 'JWT has expired'], setStatus($e, 401));
+            return response()->json(['message' => 'JWT has expired'], $e->getStatusCode());
         } catch (TokenInvalidException $e) {
             // The token is invalid, return the error response
-            return response()->json(['message' => 'JWT is invalid'], setStatus($e, 401));
+            return response()->json(['message' => 'JWT is invalid'], $e->getStatusCode());
         } catch (JWTException $e) {
             // An exception was thrown while attempting to decode the JWT, return the error response
-            return response()->json(['message' => $e->getMessage()], setStatus($e, 500));
+            return response()->json(['message' => $e->getMessage()], $e->getStatusCode());
         }
 
         // Return the User
@@ -134,18 +137,11 @@ class JwTokenManager
      */
     public function getJwtFromCookies(Request $request)
     {
-        $jwt = null;
-        if ($request->hasCookie('jwt')) {
-            $jwt = $request->cookie('jwt');
-        } else {
-            $cookies = $request->header('cookie');
-            $cookieParts = explode(' ', $cookies);
+        $jwt = getHeaderCookie($request, 'jwt=');
 
-            foreach ($cookieParts as $crumb) {
-                if (substr($crumb, 0, 4) === 'jwt=') {
-                    $jwt = trim(ltrim($crumb, 'jwt='));
-                    break;
-                }
+        if ($jwt == null) {
+            if ($request->hasCookie('jwt')) {
+                $jwt = $request->cookie('jwt');
             }
         }
 
@@ -155,14 +151,11 @@ class JwTokenManager
     /**
      * Attempt to retrieve a JWT via JWTAuth methods, and if we cannot find it, try the cookies.
      *
-     * @param null|\Request $request
+     * @param Request $request
      * @return null|string
      */
-    public function getJwtFromResources($request = null)
+    public function getJwtFromResources(Request $request)
     {
-        if ($request == null) {
-            $request = getCapturedRequest();
-        }
         $provided = $this->jwtAuth->getToken();
 
         $jwt = $provided ?: $this->getJwtFromCookies($request);
@@ -186,17 +179,75 @@ class JwTokenManager
     }
 
     /**
+     * @param Request $request
+     * @param string $jwt
+     * @return bool
+     */
+    public function validateJwt(Request $request, $jwt)
+    {
+        // Get the User connected to the JWT
+        $user = $this->getUserFromJwt($jwt);
+
+        if (!$user instanceof User) {
+            return false;
+        }
+
+        // Check that the Request User and the JwtUser match and compare the JWT Xsrf against the User's token key
+        return $user->id == $request->user()->id && $this->compareTokenKeys($jwt, $user);
+    }
+
+    /**
+     * Attempt to retrieve, validate, and return a JWT from a Request header or query string, or return a JsonResponse
+     * error if retrieval or validation fails.
+     *
+     * @param Request $request
+     * @return JsonResponse|string|array
+     */
+    public function getValidJwtFromRequest(Request $request)
+    {
+        // Get the JWT from the Header or Query String if it exists
+        if (!$jwt = $this->jwtAuth->setRequest($request)->getToken()) {
+            return response()->json(['message' => 'JWT not provided'], 401);
+        }
+
+        // Attempt to validate the JWT
+        if (!$this->validateJwt($request, $jwt)) {
+            return response()->json(['message' => 'JWT is invalid.'], 401);
+        }
+
+        return $jwt;
+    }
+
+    /**
+     * Calculate and return the number of seconds remaining before a JWT expires.
+     *
+     * @param string $jwt
+     * @return mixed
+     */
+    public function getSecondsLeftOnJwt($jwt)
+    {
+        // Get the current Unix Timestamp
+        $now = time();
+        // Get the JWT Payload
+        $payload = $this->jwtAuth->getPayload($jwt);
+        // Get the Token Expiration Unix Timestamp
+        $expiration = $payload->get('exp');
+
+        // Return the number of seconds remaining before the JWT expires
+        return $expiration - $now;
+    }
+
+    /**
      * Set a JWT cookie on the session domain with 'Http only' set to false so that it is accessible to both PHP and JS
      * from all app subdomains.
      *
      * @param string $jwt
-     * @param int $mins
      * @return \Symfony\Component\HttpFoundation\Cookie
      */
-    public function setJwtCookieFresh($jwt, $mins = 180)
+    public function setJwtCookieFresh($jwt)
     {
         // If minutes are passed through, we will use them, otherwise we'll default to 3 hrs (180 minutes)
-        return Cookie::make('jwt', $jwt, $mins, '/', env('SESSION_DOMAIN'), false, false);
+        return Cookie::make('jwt', $jwt, config('jwt.ttl', 180), '/', env('SESSION_DOMAIN'), false, false);
     }
 
     /**
@@ -211,44 +262,6 @@ class JwTokenManager
     }
 
     /**
-     * Attempt to retrieve, validate, and return a User from a JWT for various Middlewares - or return an
-     * Illuminate\Http\Response if retrieval or validation fails.
-     *
-     * @param Request $request
-     * @return $this|User|\Illuminate\Http\Response
-     */
-    public function getJwtUserForMiddleware(Request $request)
-    {
-        // Get the token from the request if it exists
-        if (!$jwt = $this->jwtAuth->setRequest($request)->getToken()) {
-            $response1 = new \Illuminate\Http\Response('JWT Not Provided', 401);
-
-            return $response1;
-        }
-        // Get the User from the token
-        $user = $this->getUserFromJwt($jwt);
-
-        if ($user instanceof User) {
-            // Compare the JWT XsrfToken custom claim against the CSRF Token stored on the User
-            if (!$this->compareTokenKeys($jwt, $user)) {
-                // Remove the corrupted token and return the response
-                $response2 = new \Illuminate\Http\Response('JWT Has Been Compromised', 401);
-
-                return $response2->withCookie($this->removeJwt($jwt));
-            }
-
-            // The User is valid and the token comparison has passed, so return the User
-            return $user;
-        }
-
-        // The User is not valid, so let's convert the JsonResponse error to a usable response object
-        $error = getJsonInfoArray($user);
-        $response3 = new \Illuminate\Http\Response($error['message'], $error['status']);
-
-        return $response3;
-    }
-
-    /**
      * Compare the xsrfToken in the JWT custom claim with the CSRF token stored on the User and return true or false
      * depending on whether or not they are both available and match.
      *
@@ -258,26 +271,15 @@ class JwTokenManager
      */
     private function compareTokenKeys($jwt, User $user)
     {
-        // Make sure we are dealing with a valid User
-        if ($user instanceof User) {
-            // Get the encrypted CSRF from the JWT xsrfToken custom claim
-            $xsrf = $this->getXsrfFromJwt($jwt);
-            // Get the User's 'token_key' column value
-            $csrf = $user->token_key;
+        // Get the encrypted CSRF from the JWT xsrfToken custom claim
+        $xsrf = $this->getXsrfFromJwt($jwt);
+        // Get the User's 'token_key' column value
+        $csrf = $user->token_key;
 
-            // If either key is null, return false
-            if ($xsrf == null || $csrf == null) {
-                return false;
-            }
+        //Compare the *decrypted* xsrfToken with the CSRF token stored on the User
+        $tokensMatch = $xsrf == null || $csrf == null ? false : $this->encrypter->decrypt($xsrf) === $csrf;
 
-            // Compare the *decrypted* xsrfToken with the CSRF token stored on the User
-            $tokensMatch = $this->encrypter->decrypt($xsrf) === $csrf ? true : false;
-
-            return $tokensMatch;
-        }
-
-        // The User is not valid, return false
-        return false;
+        return $tokensMatch;
     }
 
     /**
@@ -302,9 +304,9 @@ class JwTokenManager
     private function getXsrfFromJwt($jwt)
     {
         $payload = $this->jwtAuth->getPayload($jwt);
-        $claims = $payload->getClaims();
+        $xsrf = $payload->get('xsrfToken');
 
-        return array_key_exists('xsrfToken', $claims) ? $payload['xsrfToken'] : null;
+        return $xsrf ?: null;
     }
 
 }

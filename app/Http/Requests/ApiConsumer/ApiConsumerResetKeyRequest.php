@@ -25,7 +25,7 @@ class ApiConsumerResetKeyRequest extends FormRequest
     public function rules()
     {
         return [
-            'consumer_id' => 'required|numeric|exists:api_consumers,id|model_match:' . $this->segment(2)
+            'consumer_id' => 'required|numeric|exists:api_consumers,id|model_match:' . getModelMatch()
         ];
     }
 

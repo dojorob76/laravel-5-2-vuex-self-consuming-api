@@ -9154,6 +9154,13 @@ button.close {
   -o-animation-delay: 0.5s;
   -o-animation-iteration-count: infinite; }
 
+.form-inline .form-control {
+  min-width: 265px; }
+
+@media screen and (max-width: 767px) {
+  .form-inline .form-control, .form-inline label, .form-inline button, .form-inline .btn {
+    margin-bottom: 10px; } }
+
 .has-error .errlist {
   color: #a94442;
   text-align: left !important;
@@ -9171,7 +9178,8 @@ button.close {
       margin-right: 10px; }
   .has-error .errlist.rounded, .has-error .errlist.inline {
     border-radius: 4px;
-    border-top: 1px solid #a94442; }
+    border-top: 1px solid #a94442;
+    margin-bottom: 10px; }
   .has-error .errlist.rounded {
     margin-top: 0; }
   .has-error .errlist.inline {
@@ -9263,7 +9271,7 @@ button.close {
   margin-top: -5px; }
 
 .mlm1 {
-  margin-top: -1px; }
+  margin-left: -1px; }
 
 .mlm2 {
   margin-left: -2px; }

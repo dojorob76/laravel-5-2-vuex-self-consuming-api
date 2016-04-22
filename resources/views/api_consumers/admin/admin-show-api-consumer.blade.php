@@ -1,13 +1,10 @@
-@extends('app')
+@extends('layouts.admin.admin-layout')
 
-@section('content')
+@section('admin-content')
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <h2 class="page-header">{{$page_title}}</h2>
-
-                <!-- Display Flash Messages -->
-                @include('global.partials._flash-messages')
 
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <p class="text-center">
@@ -29,17 +26,28 @@
                             </p>
                         </div>
                     @else
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <h4>Refresh API Consumer Access Token</h4>
-                            @if($api_consumer->reset_key != null)
-                                @include('api_consumers.admin.forms.admin-api-consumer-refresh-token-form')
-                            @else
-                                @include('api_consumers.admin.forms.admin-api-consumer-reset-key-form')
-                            @endif
+                        @include('global.forms._form-errors')
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">Refresh API Consumer Access Token</div>
+                                <div class="panel-body">
+                                    @if($api_consumer->reset_key != null)
+                                        @include('api_consumers.admin.forms.admin-api-consumer-refresh-token-form')
+                                        <hr>
+                                        @include('api_consumers.admin.forms.admin-api-consumer-resend-reset-key-form')
+                                    @else
+                                        @include('api_consumers.admin.forms.admin-api-consumer-reset-key-form')
+                                    @endif
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <h4>Update API Consumer Settings</h4>
-                            @include('api_consumers.admin.forms.admin-update-api-consumer-form')
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">Update API Consumer Settings</div>
+                                <div class="panel-body">
+                                    @include('api_consumers.admin.forms.admin-update-api-consumer-form')
+                                </div>
+                            </div>
                         </div>
                     @endif
                 </div>
@@ -47,15 +55,22 @@
                 <hr class="col-sm-10 col-xs-12 col-sm-offset-1 pr0 pl0">
 
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
-                    <a class="btn btn-danger"
-                       href="{{action('Admin\AdminApiConsumerController@destroy', $api_consumer->id)}}"
+                    <form id="admin-delete-api-consumer-form"
+                          method="post"
+                          action="{{action('Admin\AdminApiConsumerController@destroy', $api_consumer)}}"
+                          data-modal-text="API Account"
                     >
-                        Delete API Access
-                    </a>
+                        @include('global.forms._delete-button', ['delete_text' => 'Delete API Consumer Account'])
+                    </form>
                 </div>
 
                 <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pr0 pl0">
             </div>
         </div>
     </div>
+    @include('global.modals.delete-modal')
+@endsection
+
+@section('postscripts')
+    @include('global.scripts.delete-script')
 @endsection

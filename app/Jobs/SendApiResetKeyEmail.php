@@ -35,7 +35,7 @@ class SendApiResetKeyEmail extends Job implements ShouldQueue
     {
         $u = $this->apiConsumer;
 
-        $mailer->send('emails.api-consumer-reset-key-email', ['api_consumer' => $u], function ($m) use ($u) {
+        $mailer->send('emails.api_consumers.api-consumer-reset-key-email', ['api_consumer' => $u], function ($m) use ($u) {
             $m->to($u->email)->subject('Refresh Your ' . env('SITE_NAME') . ' API Token');
         });
     }

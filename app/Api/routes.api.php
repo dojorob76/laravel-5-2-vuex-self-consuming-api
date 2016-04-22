@@ -18,6 +18,9 @@ $api->version('v1', [
     'namespace'  => 'App\Api\Controllers',
     'middleware' => 'api.access'
 ], function ($api) {
+    // USERS
+    $api->post('user', 'ApiUserController@store')->name('user.post');
+
     // Api Consumers (Create New, Activate, Reset/Refresh)
     $api->post('api-consumer', 'ApiApiConsumerController@store')->name('api-consumer.post');
     $api->post('api-consumer/activate', 'ApiApiConsumerController@activate')->name('api-consumer/activate.post');
@@ -44,7 +47,7 @@ $api->version('v1', [
 $api->version('v2', [
     // Because we are within the dingo router, we must include the name space again
     'namespace'  => 'App\Api\Controllers',
-    'middleware' => 'api.admin'
+    'middleware' => ['api.admin', 'token.admin']
 ], function ($api) {
     // Api Consumers (GET (all))
     $api->get('api-consumer', 'ApiApiConsumerController@index')->name('api-consumer.get');

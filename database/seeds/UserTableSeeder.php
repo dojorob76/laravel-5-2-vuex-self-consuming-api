@@ -17,7 +17,7 @@ class UserTableSeeder extends Seeder
 
         // Create the Admin User
         User::create([
-            'name'      => 'My App Admin',
+            'name'      => env('SITE_NAME') . ' Admin',
             'email'     => env('ADMIN_EMAIL'),
             'password'  => Hash::make(env('ADMIN_PASS')),
             'token_key' => 'placeholderactualcsrfwillbeprovidedonfirstlogin'
@@ -25,7 +25,7 @@ class UserTableSeeder extends Seeder
 
         // Create the System User
         User::create([
-            'name'      => 'My App Info',
+            'name'      => env('SITE_NAME') . ' Info',
             'email'     => env('SYSTEM_EMAIL'),
             'password'  => Hash::make(env('SYSTEM_PASS')),
             'token_key' => 'placeholderactualcsrfwillbeprovidedonfirstlogin'

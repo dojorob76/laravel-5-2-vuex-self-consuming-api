@@ -2,14 +2,10 @@
 
 namespace App\Repositories\User;
 
-interface UserRepositoryInterface
+use App\Repositories\AppRepositoryInterface;
+
+interface UserRepositoryInterface extends AppRepositoryInterface
 {
-
-    public function createNew($data);
-
-    public function updateExisting($id, $data);
-
-    public function deleteItems($ids);
 
     public function findByName($name);
 
@@ -19,15 +15,5 @@ interface UserRepositoryInterface
 
     public function findByEmailWith($email, $resources);
 
-    public function findById($id);
-
-    public function findByIdWith($id, $resources);
-
-    public function getAll();
-
-    public function getAllWith($resources);
-
-    public function getLastCreated();
-
-    public function getLastUpdated();
+    public function updateTokenKey($id, $tokenKey);
 }

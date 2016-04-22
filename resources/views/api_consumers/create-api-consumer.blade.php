@@ -1,13 +1,10 @@
-@extends('app')
+@extends('layouts.web.web-layout')
 
-@section('content')
+@section('web-content')
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <h2 class="page-header">{{$page_title}}</h2>
-
-                <!-- Display Flash Messages -->
-                @include('global.partials._flash-messages')
 
                 @if($api_consumer)
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -20,14 +17,17 @@
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <p class="text-center">
                             To access the {{$site_name}} API, you will need an API Access Token. Please enter your valid
-                            email address in the field below to get started.
+                            email address in the form below to get started.
                         </p>
                     </div>
 
-                    <hr class="col-sm-10 col-xs-12 col-sm-offset-1 pr0 pl0">
-
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        @include('api_consumers.forms.create-api-consumer-form')
+                    <div class="col-sm-8 col-sm-offset-2">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Create New API Account</div>
+                            <div class="panel-body">
+                                @include('api_consumers.forms.create-api-consumer-form')
+                            </div>
+                        </div>
                     </div>
                 @endif
 

@@ -1,0 +1,10 @@
+.form-inline{
+    .form-control{
+        min-width: 265px;
+    }
+    @media screen and (max-width: $screen-xs-max) {
+        .form-control, label, button, .btn{
+            margin-bottom: 10px;
+        }
+    }
+}

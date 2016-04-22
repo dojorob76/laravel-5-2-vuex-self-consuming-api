@@ -40,7 +40,7 @@
     <body>
         <div class="container">
             <div class="content">
-                @include('global.partials._flash-messages')
+                @include('layouts.shared.partials._flash-messages')
                 <div class="title">Naughty, Naughty... You're Not Allowed To Be Here!</div>
             </div>
         </div>

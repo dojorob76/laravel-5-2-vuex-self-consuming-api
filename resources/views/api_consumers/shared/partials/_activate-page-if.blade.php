@@ -6,7 +6,7 @@
     </p>
     <p class="text-center">
         Please copy it now, and store it in a safe place. Once you have successfully copied and stored the token, click
-        the 'Activate' button below to start using it.
+        the 'Activate Token' button below to start using it.
     </p>
     <form class="form-inline text-center">
         <div class="form-group">
@@ -14,10 +14,13 @@
             <input class="form-control"
                    id="access-token-once"
                    value="{{session('access_token')}}"
-                   style="min-width: 200px;"
                    readonly
             >
-            <a class="btn btn-primary clipboard" data-clipboard-target="#access-token-once">
+            <a class="btn btn-primary clipboard"
+               data-clipboard-target="#access-token-once"
+               data-toggle="tooltip"
+               title="Copy API Access Token to clipboard"
+            >
                 <span class="glyphicon glyphicon-copy"></span>
                 <span class="sr-only">Copy token to clipboard</span>
             </a>

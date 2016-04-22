@@ -21,8 +21,9 @@ var jwToken = {
         }
     },
     addCookie: function (jwt) {
-        // Set the JWT in the jwt cookie - valid for 3 hours (in seconds)
-        docCookies.setItem('jwt', jwt, 10800, '/', appGlobals.appDomain);
+        var ttl = appGlobals.jwtMin * 60;
+        // Set the JWT in the jwt cookie - valid for the JWT TTL (in seconds) on the session domain
+        docCookies.setItem('jwt', jwt, ttl, '/', appGlobals.appDomain);
     },
     removeCookie: function () {
         // Remove the jwt cookie by setting the value to null and expiring it

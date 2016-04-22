@@ -31,6 +31,7 @@ class Kernel extends HttpKernel
             \Illuminate\Session\Middleware\StartSession::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
+            \App\Http\Middleware\PerpetuateAuthFromJwt::class,
             \App\Http\Middleware\AdminSubdomain::class,
         ],
 
@@ -55,5 +56,7 @@ class Kernel extends HttpKernel
         'api.access'     => \App\Http\Middleware\ApiAccessToken::class,
         'api.admin'      => \App\Http\Middleware\ApiAdminToken::class,
         'consumer.owner' => \App\Http\Middleware\ApiConsumerIsOwner::class,
+        'token.auth'     => \App\Http\Middleware\TokenAuth::class,
+        'token.admin'    => \App\Http\Middleware\TokenAdmin::class,
     ];
 }

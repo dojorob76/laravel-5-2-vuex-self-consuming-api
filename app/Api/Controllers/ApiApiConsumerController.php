@@ -74,7 +74,7 @@ class ApiApiConsumerController extends BaseController
      */
     public function reactivate(ApiConsumerReactivationRequest $request)
     {
-        return $this->setApiResponse($this->apiConsumerService->reactivateApiConsumer($request->all()));
+        return $this->setApiResponse($this->apiConsumerService->findApiConsumerByEmail($request->get('email')));
     }
 
     /**
@@ -85,7 +85,7 @@ class ApiApiConsumerController extends BaseController
      */
     public function show($id)
     {
-        return $this->setApiResponse($this->apiConsumerService->getApiConsumerById($id));
+        return $this->setApiResponse($this->apiConsumerService->findApiConsumerById($id));
     }
 
     /**

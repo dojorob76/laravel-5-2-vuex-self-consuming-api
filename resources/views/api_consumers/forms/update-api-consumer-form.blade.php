@@ -2,15 +2,14 @@
 <form method="POST"
       action="{{action('ApiConsumerController@update', $api_consumer->id)}}"
       id="update-api-consumer-form"
+      class="form-horizontal"
 >
     @include('api_consumers.shared.forms._update-api-consumer-form-fields')
-    <button type="submit"
-            class="btn btn-primary center-block ajax-validate"
-            data-prefix="update-api-consumer-"
-    >
-        @include('global.partials._button-wait')
-        <span class="submit-text" data-wait="Updating...">
-            Update Email
-        </span>
-    </button>
+    <!-- Submit Button -->
+    <div class="form-group">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-10">
+            @include('global.forms._ajax-submit-button', ['data_prefix' => 'update-api-consumer-', 'submit_text' => 'Udpate Email'])
+        </div>
+    </div>
 </form>

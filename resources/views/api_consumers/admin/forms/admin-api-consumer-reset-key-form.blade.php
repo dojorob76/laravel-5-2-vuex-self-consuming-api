@@ -1,5 +1,4 @@
 <!-- Admin API Consumer Reset Key Form -->
-@include('global.partials._form-errors')
 <form method="POST"
       action="{{action('Admin\AdminApiConsumerController@postResetKey')}}"
       id="admin-api-consumer-reset-key-form"

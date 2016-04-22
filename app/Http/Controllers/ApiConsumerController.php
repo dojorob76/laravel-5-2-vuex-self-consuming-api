@@ -59,7 +59,7 @@ class ApiConsumerController extends BaseController
         $apiConsumer = $this->apiConsumerWebService->getLoggedInApiConsumer();
 
         return view('api_consumers.create-api-consumer')->with([
-            'page_title' => $pageTitle,
+            'page_title'   => $pageTitle,
             'api_consumer' => $apiConsumer
         ]);
     }
@@ -75,7 +75,11 @@ class ApiConsumerController extends BaseController
     {
         $apiConsumer = $this->apiPostRequest('api-consumer', $request->all());
 
-        return $this->apiConsumerWebService->getStarterTokenResponse($request, $apiConsumer);
+        if (!json_decode($apiConsumer)) {
+            return $this->apiConsumerWebService->starterTokenErrorResponse($request, $apiConsumer);
+        }
+
+        return $this->apiConsumerWebService->starterTokenSuccessResponse($request, $apiConsumer);
     }
 
     /**
@@ -89,7 +93,7 @@ class ApiConsumerController extends BaseController
         $apiConsumer = $this->apiConsumerWebService->getLoggedInApiConsumer();
 
         return view('api_consumers.activate-api-consumer')->with([
-            'page_title' => $pageTitle,
+            'page_title'   => $pageTitle,
             'api_consumer' => $apiConsumer
         ]);
     }
@@ -105,7 +109,11 @@ class ApiConsumerController extends BaseController
     {
         $apiConsumer = $this->apiPostRequest('api-consumer/activate', $request->all());
 
-        return $this->apiConsumerWebService->getActivationResponse($request, $apiConsumer);
+        if (!json_decode($apiConsumer)) {
+            return $this->apiConsumerWebService->activationErrorResponse($request, $apiConsumer);
+        }
+
+        return $this->apiConsumerWebService->activationSuccessResponse($request, $apiConsumer);
     }
 
     /**
@@ -119,7 +127,7 @@ class ApiConsumerController extends BaseController
         $apiConsumer = $this->apiConsumerWebService->getLoggedInApiConsumer();
 
         return view('api_consumers.reactivate-api-consumer')->with([
-            'page_title' => $pageTitle,
+            'page_title'   => $pageTitle,
             'api_consumer' => $apiConsumer
         ]);
     }
@@ -134,7 +142,11 @@ class ApiConsumerController extends BaseController
     {
         $apiConsumer = $this->apiPostRequest('api-consumer/reactivate', $request->all());
 
-        return $this->apiConsumerWebService->getReactivationResponse($request, $apiConsumer);
+        if (!json_decode($apiConsumer)) {
+            return $this->apiConsumerWebService->reactivationNewApiConsumerResponse($request);
+        }
+
+        return $this->apiConsumerWebService->reactivationExistingApiConsumerResponse($request, $apiConsumer);
     }
 
     /**
@@ -164,7 +176,11 @@ class ApiConsumerController extends BaseController
     {
         $apiConsumer = $this->apiPostRequest('api-consumer/reset-key', $request->all());
 
-        return $this->apiConsumerWebService->getPublicResetKeyResponse($request, $apiConsumer);
+        if (!json_decode($apiConsumer)) {
+            return $this->apiConsumerWebService->resetKeyErrorResponse($request, $apiConsumer);
+        }
+
+        return $this->apiConsumerWebService->resetKeySuccessResponse($request, $apiConsumer);
     }
 
     /**
@@ -178,7 +194,11 @@ class ApiConsumerController extends BaseController
     {
         $apiConsumer = $this->apiPostRequest('api-consumer/refresh-token', $request->all());
 
-        return $this->apiConsumerWebService->getStarterTokenResponse($request, $apiConsumer);
+        if (!json_decode($apiConsumer)) {
+            return $this->apiConsumerWebService->starterTokenErrorResponse($request, $apiConsumer);
+        }
+
+        return $this->apiConsumerWebService->starterTokenSuccessResponse($request, $apiConsumer);
     }
 
     /**
@@ -192,7 +212,11 @@ class ApiConsumerController extends BaseController
     {
         $apiConsumer = $this->apiPutRequest('api-consumer/' . $model->id, $request->all());
 
-        return $this->apiConsumerWebService->getUpdateResponse($request, $apiConsumer);
+        if (!json_decode($apiConsumer)) {
+            return $this->apiConsumerWebService->updateErrorResponse($request, $apiConsumer);
+        }
+
+        return $this->apiConsumerWebService->updateSuccessResponse($request);
     }
 
     /**
@@ -205,7 +229,7 @@ class ApiConsumerController extends BaseController
     {
         $deleted = $this->apiDeleteRequest('api-consumer/' . $model->id);
 
-        return $this->apiConsumerWebService->getDeleteResponse(getCapturedRequest(), $deleted);
+        return $this->apiConsumerWebService->getDeleteResponse($this->getRequestInstance(), $deleted);
     }
 
     /**

@@ -1,5 +1,5 @@
 <!-- Admin Activate Api Consumer Form -->
-@include('global.partials._form-errors')
+@include('global.forms._form-errors')
 <form method="POST"
       action="{{action('Admin\AdminApiConsumerController@postActivate')}}"
       id="admin-activate-api-consumer-form"

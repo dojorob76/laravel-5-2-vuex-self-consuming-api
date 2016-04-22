@@ -6,8 +6,10 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" id="csrf-token" content="{{ csrf_token() }}">
+        <!-- Include the App Meta Content for Scripts -->
+        @include('layouts.shared.partials._app-meta-content')
 
-        <title>@if(isset($page_title)){{$page_title}}@else{{$site_name}}@endif</title>
+        @yield('title')
 
         <!-- Favicon -->
         <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
@@ -29,9 +31,8 @@
     </head>
 
     <body>
-
-        <!-- Include the App Data Attributes -->
-        @include('global.partials._app-data-attributes')
+        <!-- Load the Header Navigation -->
+        @yield('header-nav')
 
         <!-- Load the main page content -->
         @yield('content')
@@ -41,7 +42,6 @@
 
         <!-- Load additional, page-specific, footer JS -->
         @yield('postscripts')
-
     </body>
 
 </html>

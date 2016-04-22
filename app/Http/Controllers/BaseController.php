@@ -9,13 +9,13 @@ use App\Utilities\JwTokenManager;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
+use App\Utilities\RequestResponseUtilityTrait;
 use League\Fractal\TransformerAbstract as Transformer;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class BaseController extends Controller
 {
 
-    use Helpers;
+    use Helpers, RequestResponseUtilityTrait;
 
     protected $jwTokenManager;
 
@@ -27,14 +27,15 @@ class BaseController extends Controller
     /**
      * Get the properly formatted (Dingo Dispatcher) GET request with an API Token query string.
      *
-     * @param $path (route URL - relative, i.e., '/my-route')
+     * @param string $path (route URL - relative, i.e., '/my-route')
      * @param string $v (add 'v2' for admin paths, defaults to 'v1')
+     * @param bool $admin (Flag a path to use the admin token, defaults to false)
      * @return mixed (Dingo dispatcher call with api_access_token in query string)
      */
-    public function apiGetRequest($path, $v = 'v1')
+    public function apiGetRequest($path, $v = 'v1', $admin = false)
     {
         try {
-            $response = $this->api->version($v)->get($this->setAccessTokenPath($path, $v));
+            $response = $this->api->version($v)->get($this->setAccessTokenPath($path, $v, $admin));
         } catch (Exception $e) {
             return $this->getWebExceptionResponse($e);
         }
@@ -45,16 +46,17 @@ class BaseController extends Controller
     /**
      * Get the properly formatted (Dingo Dispatcher) GET request with JWT in the header and API Token query string.
      *
-     * @param $path (route URL - relative, i.e., '/my-route')
+     * @param string $path (route URL - relative, i.e., '/my-route')
      * @param string $v (add 'v2' for admin paths, defaults to 'v1')
+     * @param bool $admin (Flag a path to use the admin token, defaults to false)
      * @return mixed (Dingo dispatcher call with header)
      */
-    public function apiGetRequestWithJwt($path, $v = 'v1')
+    public function apiGetRequestWithJwt($path, $v = 'v1', $admin = false)
     {
         $jwt = $this->setJwtHeader();
 
         try {
-            $response = $this->api->version($v)->header('Authorization', $jwt)->get($this->setAccessTokenPath($path, $v));
+            $response = $this->api->version($v)->header('Authorization', $jwt)->get($this->setAccessTokenPath($path, $v, $admin));
         } catch (Exception $e) {
             return $this->getWebExceptionResponse($e);
         }
@@ -65,15 +67,16 @@ class BaseController extends Controller
     /**
      * Get the properly formatted (Dingo Dispatcher) POST request with an API Token query string.
      *
-     * @param $path (route URL - relative, i.e., '/my-route')
-     * @param $data (Form Request (all()) )
+     * @param string $path (route URL - relative, i.e., '/my-route')
+     * @param array $data (Form Request (all()) )
      * @param string $v (add 'v2' for admin paths, defaults to 'v1')
+     * @param bool $admin (Flag a path to use the admin token, defaults to false)
      * @return mixed (Dingo dispatcher call with api_access_token in query string)
      */
-    public function apiPostRequest($path, $data, $v = 'v1')
+    public function apiPostRequest($path, $data, $v = 'v1', $admin = false)
     {
         try {
-            $response = $this->api->version($v)->post($this->setAccessTokenPath($path, $v), $data);
+            $response = $this->api->version($v)->post($this->setAccessTokenPath($path, $v, $admin), $data);
         } catch (Exception $e) {
             return $this->getWebExceptionResponse($e);
         }
@@ -84,17 +87,19 @@ class BaseController extends Controller
     /**
      * Get the properly formatted (Dingo Dispatcher) POST request with JWT in the header and API Token query string.
      *
-     * @param $path (route URL - relative, i.e., '/my-route')
-     * @param $data (Form Request (all()) )
+     * @param string $path (route URL - relative, i.e., '/my-route')
+     * @param array $data (Form Request (all()) )
      * @param string $v (add 'v2' for admin paths, defaults to 'v1')
+     * @param bool $admin (Flag a path to use the admin token, defaults to false)
      * @return mixed (Dingo dispatcher call with header)
      */
-    public function apiPostRequestWithJwt($path, $data, $v = 'v1')
+    public function apiPostRequestWithJwt($path, $data, $v = 'v1', $admin = false)
     {
         $jwt = $this->setJwtHeader();
 
         try {
-            $response = $this->api->version($v)->header('Authorization', $jwt)->post($this->setAccessTokenPath($path, $v), $data);
+            $response = $this->api->version($v)->header('Authorization', $jwt)->post($this->setAccessTokenPath($path,
+                $v, $admin), $data);
         } catch (Exception $e) {
             return $this->getWebExceptionResponse($e);
         }
@@ -105,15 +110,16 @@ class BaseController extends Controller
     /**
      * Get the properly formatted (Dingo Dispatcher) PUT request with an API Token query string.
      *
-     * @param $path (route URL - relative, i.e., '/my-route')
-     * @param $data (Form Request (all()) )
+     * @param string $path (route URL - relative, i.e., '/my-route')
+     * @param array $data (Form Request (all()) )
      * @param string $v (add 'v2' for admin paths, defaults to 'v1')
+     * @param bool $admin (Flag a path to use the admin token, defaults to false)
      * @return mixed (Dingo dispatcher call with api_access_token in query string)
      */
-    public function apiPutRequest($path, $data, $v = 'v1')
+    public function apiPutRequest($path, $data, $v = 'v1', $admin = false)
     {
         try {
-            $response = $this->api->version($v)->put($this->setAccessTokenPath($path, $v), $data);
+            $response = $this->api->version($v)->put($this->setAccessTokenPath($path, $v, $admin), $data);
         } catch (Exception $e) {
             return $this->getWebExceptionResponse($e);
         }
@@ -124,17 +130,19 @@ class BaseController extends Controller
     /**
      * Get the properly formatted (Dingo Dispatcher) PUT request with JWT in the header and API Token query string.
      *
-     * @param $path (route URL - relative, i.e., '/my-route')
-     * @param $data (Form Request (all()) )
+     * @param string $path (route URL - relative, i.e., '/my-route')
+     * @param array $data (Form Request (all()) )
      * @param string $v (add 'v2' for admin paths, defaults to 'v1')
+     * @param bool $admin (Flag a path to use the admin token, defaults to false)
      * @return mixed (Dingo dispatcher call with header)
      */
-    public function apiPutRequestWithJwt($path, $data, $v = 'v1')
+    public function apiPutRequestWithJwt($path, $data, $v = 'v1', $admin = false)
     {
         $jwt = $this->setJwtHeader();
 
         try {
-            $response = $this->api->version($v)->header('Authorization', $jwt)->put($this->setAccessTokenPath($path, $v), $data);
+            $response = $this->api->version($v)->header('Authorization', $jwt)->put($this->setAccessTokenPath($path, $v,
+                $admin), $data);
         } catch (Exception $e) {
             return $this->getWebExceptionResponse($e);
         }
@@ -145,14 +153,15 @@ class BaseController extends Controller
     /**
      * Get the properly formatted (Dingo Dispatcher) DELETE request with an API Token query string.
      *
-     * @param $path (route URL - relative, i.e., '/my-route')
+     * @param string $path (route URL - relative, i.e., '/my-route')
      * @param string $v (add 'v2' for admin paths, defaults to 'v1')
+     * @param bool $admin (Flag a path to use the admin token, defaults to false)
      * @return mixed (Dingo dispatcher call with api_access_token in query string)
      */
-    public function apiDeleteRequest($path, $v = 'v1')
+    public function apiDeleteRequest($path, $v = 'v1', $admin = false)
     {
         try {
-            $response = $this->api->version($v)->delete($this->setAccessTokenPath($path, $v));
+            $response = $this->api->version($v)->delete($this->setAccessTokenPath($path, $v, $admin));
         } catch (Exception $e) {
             return $this->getWebExceptionResponse($e);
         }
@@ -163,16 +172,18 @@ class BaseController extends Controller
     /**
      * Get the properly formatted (Dingo Dispatcher) DELETE request with JWT in the header and API Token query string.
      *
-     * @param $path (route URL - relative, i.e., '/my-route')
+     * @param string $path (route URL - relative, i.e., '/my-route')
      * @param string $v (add 'v2' for admin paths, defaults to 'v1')
+     * @param bool $admin (Flag a path to use the admin token, defaults to false)
      * @return mixed (Dingo dispatcher call with header)
      */
-    public function apiDeleteRequestWithJwt($path, $v = 'v1')
+    public function apiDeleteRequestWithJwt($path, $v = 'v1', $admin = false)
     {
         $jwt = $this->setJwtHeader();
 
         try {
-            $response = $this->api->version($v)->header('Authorization', $jwt)->delete($this->setAccessTokenPath($path, $v));
+            $response = $this->api->version($v)->header('Authorization', $jwt)->delete($this->setAccessTokenPath($path,
+                $v, $admin));
         } catch (Exception $e) {
             return $this->getWebExceptionResponse($e);
         }
@@ -209,17 +220,18 @@ class BaseController extends Controller
     /**
      * Add a valid System or Admin Api Access Token to the path and return it.
      *
-     * @param $path
+     * @param string $path
      * @param string $version ('v2' for admin paths, 'v1' for system paths)
+     * @param bool $admin
      * @return string
      */
-    protected function setAccessTokenPath($path, $version)
+    protected function setAccessTokenPath($path, $version, $admin)
     {
         // If an API Consumer is accessing the web app, use their token - otherwise use the system token
         $userToken = session()->has('api_consumer_token') ? session('api_consumer_token') : env('SYSTEM_ACCESS_TOKEN');
 
-        // If the API version is not 'v1', use the admin token, otherwise use the userToken
-        $token = $version == 'v1' ? $userToken : env('ADMIN_ACCESS_TOKEN');
+        // If the admin flag is set or the API version is 'v2', use the admin token, otherwise use the userToken
+        $token = $admin || $version == 'v2' ? env('ADMIN_ACCESS_TOKEN') : $userToken;
 
         // Append the appropriate token to the path
         return $path . '?api_access_token=' . $token;
@@ -233,7 +245,7 @@ class BaseController extends Controller
      */
     private function getApiResponseFromJson(JsonResponse $json)
     {
-        $info = getJsonInfoArray($json);
+        $info = $this->getJsonInfoArray($json);
         $status = $info['status'];
 
         if ($status >= 400) {
@@ -254,11 +266,7 @@ class BaseController extends Controller
      */
     private function getWebExceptionResponse(Exception $e)
     {
-        if ($e instanceof HttpException) {
-            $status = $e->getStatusCode();
-        } else {
-            $status = $e->getCode();
-        }
+        $status = $this->setStatus($e, 500);
 
         $webResponse = new JsonResponse(['message' => $e->getMessage()], $status);
 
@@ -273,7 +281,7 @@ class BaseController extends Controller
      */
     private function setJwtHeader()
     {
-        $jwt = $this->jwTokenManager->getJwtFromResources();
+        $jwt = $this->jwTokenManager->getJwtFromResources($this->getRequestInstance());
 
         return $jwt == null ?: 'Bearer ' . $jwt;
     }
@@ -286,7 +294,7 @@ class BaseController extends Controller
      */
     private function setJwtQuery()
     {
-        $jwt = $this->jwTokenManager->getJwtFromResources();
+        $jwt = $this->jwTokenManager->getJwtFromResources($this->getRequestInstance());
 
         return $jwt == null ?: 'token=' . $jwt;
     }

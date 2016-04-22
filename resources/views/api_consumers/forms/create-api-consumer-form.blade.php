@@ -2,30 +2,12 @@
 <form method="POST"
       action="{{action('ApiConsumerController@store')}}"
       id="create-api-consumer-form"
+      class="form-horizontal"
 >
-    {{csrf_field()}}
-    <div class="form-inline text-center">
-        <div class="form-group" id="create-api-consumer-email">
-            <label for="email">Email</label>
-            <input type="email"
-                   name="email"
-                   value="{{session('email_address')}}"
-                   placeholder="Enter a Valid Email Address"
-                   class="form-control"
-                   style="min-width: 300px;"
-            >
-            <button type="submit"
-                    class="btn btn-primary ajax-validate"
-                    data-prefix="create-api-consumer-"
-            >
-                @include('global.partials._button-wait')
-                <span class="submit-text" data-wait="Generating Token...">
-                    Get API Access Token
-                </span>
-            </button>
-            <div class="errlist create-api-consumer-email-error-msg inline">
-                <ul class="mb0"></ul>
-            </div>
+    @include('api_consumers.shared.forms._create-api-consumer-form-fields')
+    <div class="form-group">
+        <div class="col-sm-10 col-sm-offset-2">
+            @include('global.forms._ajax-submit-button', ['data_prefix' => 'create-api-consumer-', 'data_wait' => 'Generating Token...', 'submit_text' => 'Get API Access Token'])
         </div>
     </div>
 </form>
