@@ -40,7 +40,7 @@
     <body>
         <div class="container">
             <div class="content">
-                @include('global.partials._flash-messages')
+                @include('layouts.shared.partials._flash-messages')
                 <div class="title">That page has been dead for 20 years...</div>
             </div>
         </div>

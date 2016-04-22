@@ -17,3 +17,8 @@
         ajaxForm.validate(form, prefix, data, null, null);
     });
 </script>
+
+<!-- Initialize Bootstrap Tooltips -->
+<script>
+    $('[data-toggle="tooltip"]').tooltip();
+</script>

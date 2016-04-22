@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
-abstract class EloquentRepository
+abstract class EloquentRepository implements AppRepositoryInterface
 {
 
     private $model;
@@ -162,7 +162,7 @@ abstract class EloquentRepository
      * @param mixed $value
      * @return Model|ModelNotFoundException
      */
-    protected function findByValue($key, $value)
+    public function findByValue($key, $value)
     {
         return $this->model->where($key, $value)->firstOrFail();
     }
@@ -176,7 +176,7 @@ abstract class EloquentRepository
      * @param string $resource
      * @return Model|static|ModelNotFoundException
      */
-    protected function findByValueWith($key, $value, $resource)
+    public function findByValueWith($key, $value, $resource)
     {
         return $this->model->with([
             $resource => function ($q) use ($key, $value) {

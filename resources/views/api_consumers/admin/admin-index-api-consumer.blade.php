@@ -1,13 +1,10 @@
-@extends('app')
+@extends('layouts.admin.admin-layout')
 
-@section('content')
+@section('admin-content')
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <h2 class="page-header">{{$page_title}}</h2>
-
-                <!-- Display Flash Messages -->
-                @include('global.partials._flash-messages')
 
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <p class="text-center">
@@ -39,4 +36,9 @@
             </div>
         </div>
     </div>
+    @include('global.modals.delete-modal')
+@endsection
+
+@section('postscripts')
+    @include('global.scripts.delete-script')
 @endsection

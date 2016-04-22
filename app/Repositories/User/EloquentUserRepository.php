@@ -69,4 +69,22 @@ class EloquentUserRepository extends EloquentRepository implements UserRepositor
     {
         return $this->findByValueWith('email', $email, $resource);
     }
+
+    /**
+     * Attempt to update an existing User's token_key column, then return the updated User or a ModelNotFoundException.
+     *
+     * @param int $id
+     * @param string $tokenKey
+     * @return User|ModelNotFoundException
+     */
+    public function updateTokenKey($id, $tokenKey)
+    {
+        $user = $this->findById($id);
+
+        $user->token_key = $tokenKey;
+
+        $user->save();
+
+        return $user;
+    }
 }

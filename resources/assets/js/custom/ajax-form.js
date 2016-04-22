@@ -25,10 +25,12 @@ var ajaxForm = {
             data: requestData
         });
 
+        var self = this;
+
         ajaxRequest.done(function (data, textStatus, jqXHR) {
             // If success callbacks were provided, execute each one of them
             if (successCallbacks != null) {
-                this.executeCallbacks(successCallbacks, data, textStatus, jqXHR);
+                self.executeCallbacks(successCallbacks, data, textStatus, jqXHR);
             }
         });
 
@@ -43,7 +45,7 @@ var ajaxForm = {
 
             // If error callbacks were provided, execute each one of them
             if (errorCallbacks != null) {
-                this.executeCallbacks(errorCallbacks, data, textStatus, jqXHR);
+                self.executeCallbacks(errorCallbacks, data, textStatus, jqXHR);
             }
         });
 
@@ -63,6 +65,7 @@ var ajaxForm = {
                 // No refresh is happening, so reinstate the Submit Button
                 buttonFeedback.formSubmit(form, 'hide');
             }
+            console.log(pData);
         });
     },
 

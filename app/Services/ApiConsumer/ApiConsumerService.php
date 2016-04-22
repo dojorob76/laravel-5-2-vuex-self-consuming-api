@@ -3,28 +3,34 @@
 namespace App\Services\ApiConsumer;
 
 use App\ApiConsumer;
+use App\Services\ModelService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
 use App\Utilities\ApiTokenManager;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Repositories\ApiConsumer\ApiConsumerRepositoryInterface;
 
-class ApiConsumerService
+class ApiConsumerService extends ModelService
 {
 
     protected $apiTokenManager;
     protected $apiConsumerRepo;
+    protected $model;
 
     /**
-     * ApiConsumerApiService constructor.
+     * ApiConsumerService constructor.
      *
      * @param ApiTokenManager $apiTokenManager
      * @param ApiConsumerRepositoryInterface $apiConsumerRepo
+     * @param ApiConsumer $model
      */
-    public function __construct(ApiTokenManager $apiTokenManager, ApiConsumerRepositoryInterface $apiConsumerRepo)
-    {
+    public function __construct(
+        ApiTokenManager $apiTokenManager,
+        ApiConsumerRepositoryInterface $apiConsumerRepo,
+        ApiConsumer $model
+    ) {
         $this->apiTokenManager = $apiTokenManager;
         $this->apiConsumerRepo = $apiConsumerRepo;
+        parent::__construct($apiConsumerRepo, $model);
     }
 
     /**
@@ -34,16 +40,7 @@ class ApiConsumerService
      */
     public function getAllApiConsumers()
     {
-        // Attempt to retrieve the ApiConsumers
-        try {
-            $apiConsumers = $this->apiConsumerRepo->getAll();
-        } catch (\Exception $e) {
-            // The ApiConsumers could not be retrieved, so return JsonResponse error
-            return response()->json(['message' => $e->getMessage()], setStatus($e, 404));
-        }
-
-        // Return all ApiConsumers
-        return $apiConsumers;
+        return $this->getAllInstances();
     }
 
     /**
@@ -52,21 +49,9 @@ class ApiConsumerService
      * @param int $id
      * @return ApiConsumer|JsonResponse
      */
-    public function getApiConsumerById($id)
+    public function findApiConsumerById($id)
     {
-        // Make sure we received the correct input type
-        miscastVar('intnum', $id, 'The ID of an API Consumer');
-
-        // If we received the correct input, attempt to find the ApiConsumer
-        try {
-            $apiConsumer = $this->apiConsumerRepo->findById($id);
-        } catch (ModelNotFoundException $e) {
-            // The ApiConsumer does not exist, so return the JsonRepsonse error
-            return response()->json(['message' => $e->getMessage()], setStatus($e, 404));
-        }
-
-        // Return the ApiConsumer
-        return $apiConsumer;
+        return $this->findInstanceById($id);
     }
 
     /**
@@ -75,21 +60,9 @@ class ApiConsumerService
      * @param string $email
      * @return ApiConsumer|JsonResponse
      */
-    public function getApiConsumerByEmail($email)
+    public function findApiConsumerByEmail($email)
     {
-        // Make sure we received the correct input type
-        miscastVar('string', $email, 'The email address of an API Consumer');
-
-        // If we received the correct input, attempt to find the ApiConsumer
-        try {
-            $apiConsumer = $this->apiConsumerRepo->findByEmail($email);
-        } catch (ModelNotFoundException $e) {
-            // The ApiConsumer does not exist, so return the JsonRepsonse error
-            return response()->json(['message' => $e->getMessage()], setStatus($e, 404));
-        }
-
-        // Return the ApiConsumer
-        return $apiConsumer;
+        return $this->findInstanceByValue('email', $email, 'string');
     }
 
     /**
@@ -100,19 +73,7 @@ class ApiConsumerService
      */
     public function createNewApiConsumer($data)
     {
-        // Make sure we received the correct input type
-        miscastVar('array', $data, 'create Api Consumer request data');
-
-        // If we received the correct input, attempt to create the new ApiConsumer
-        try {
-            $newConsumer = $this->apiConsumerRepo->createNew($data);
-        } catch (\Exception $e) {
-            // The ApiConsumer could not be created, so return JsonResponse error
-            return response()->json(['message' => $e->getMessage()], setStatus($e, 422));
-        }
-
-        // Return the new ApiConsumer
-        return $newConsumer;
+        return $this->createNewInstance($data);
     }
 
     /**
@@ -124,21 +85,7 @@ class ApiConsumerService
      */
     public function updateExistingApiConsumer($id, $data)
     {
-        // Make sure we received the correct input type for the ID
-        miscastVar('intnum', $id, 'The ID of the API Consumer to update');
-        // Make sure we received the correct input type for the Data
-        miscastVar('array', $data, 'update API Consumer request data');
-
-        // If we received the correct input, attempt to update the ApiConsumer
-        try {
-            $updatedConsumer = $this->apiConsumerRepo->updateExisting($id, $data);
-        } catch (\Exception $e) {
-            // The ApiConsumer could not be updated, so return JsonResponse error
-            return response()->json(['message' => $e->getMessage()], setStatus($e, 422));
-        }
-
-        // Return the updated ApiConsumer
-        return $updatedConsumer;
+        return $this->updateExistingInstance($id, $data);
     }
 
     /**
@@ -147,20 +94,7 @@ class ApiConsumerService
      */
     public function destroySingleApiConsumer($id)
     {
-        // Make sure we received the correct input type
-        miscastVar('intnum', $id, 'The ID of an API Consumer to delete');
-
-        // If we received the correct input, attempt to find the ApiConsumer
-        $apiConsumer = $this->getApiConsumerById($id);
-
-        // Make sure we are dealing with a valid ApiConsumer
-        if ($apiConsumer instanceof ApiConsumer) {
-            // If the ApiConsumer exists, attempt to delete them
-            return $this->destroyApiConsumers([$id]);
-        }
-
-        // The API Consumer could not be found, so return JsonResponse error
-        return $apiConsumer;
+        return $this->destroySingleInstance($id);
     }
 
     /**
@@ -169,23 +103,7 @@ class ApiConsumerService
      */
     public function destroyApiConsumers($ids)
     {
-        // Make sure we received the correct input type
-        miscastVar('array', $ids, 'The IDs of the API Consumers to be deleted');
-
-        // If we received the correct input, attempt to delete the ApiConsumer(s)
-        try {
-            $response = $this->apiConsumerRepo->deleteItems($ids);
-        } catch (\Exception $e) {
-            // The ApiConsumer(s) could not be deleted, so return JsonResponse error
-            return response()->json(['message' => $e->getMessage()], setStatus($e, 422));
-        }
-        // Set success/failure responses
-        $sm = count($ids) === 1 ? 'Consumer has' : 'Consumers have';
-        $fm = count($ids) === 1 ? 'Consumer was not' : 'Consumers have not been';
-        $success = response()->json(['message' => $response . ' API ' . $sm . ' been deleted.'], 200);
-        $fail = response()->json(['message' => 'The API ' . $fm . ' deleted.'], 422);
-
-        return $response === 0 ? $fail : $success;
+        return $this->destroyInstances($ids);
     }
 
     /**
@@ -197,11 +115,13 @@ class ApiConsumerService
      */
     public function setNewApiConsumer($email)
     {
-        // Make sure we received the correct input type
-        miscastVar('string', $email, 'the email address of a new Api Consumer');
+        if (app()->environment() == 'local'){
+            // Make sure we received the correct input type
+            $this->miscastVar('string', $email, 'the email address of a new Api Consumer');
+        }
 
         // If this email address is from an ApiConsumer who is not yet active, we will need to update instead of create
-        $apiConsumer = $this->getApiConsumerByEmail($email);
+        $apiConsumer = $this->findApiConsumerByEmail($email);
         if ($apiConsumer instanceof ApiConsumer) {
             if ($apiConsumer->level == 0 && $this->apiTokenManager->getTokenStatus($apiConsumer->api_token) == 'starter') {
                 // This is an ApiConsumer who has not activated their token, so send them through that process now
@@ -229,11 +149,13 @@ class ApiConsumerService
      */
     public function updateApiConsumerToken($data)
     {
-        // Make sure we received the correct input type
-        miscastVar('array', $data, 'refresh Api Consumer token request data');
+        if (app()->environment() == 'local'){
+            // Make sure we received the correct input type
+            $this->miscastVar('array', $data, 'refresh Api Consumer token request data');
+        }
 
         // If we received the correct input, attempt to retrieve the ApiConsumer
-        $apiConsumer = $this->getApiConsumerByEmail($data['email']);
+        $apiConsumer = $this->findApiConsumerByEmail($data['email']);
 
         // Make sure we have a valid ApiConsumer
         if ($apiConsumer instanceof ApiConsumer) {
@@ -257,11 +179,13 @@ class ApiConsumerService
      */
     public function activateValidApiConsumer($data)
     {
-        // Make sure we received the correct input type
-        miscastVar('array', $data, 'Api Consumer activation request data');
+        if (app()->environment() == 'local'){
+            // Make sure we received the correct input type
+            $this->miscastVar('array', $data, 'Api Consumer activation request data');
+        }
 
         // If we received the correct input type, attempt to retrieve the ApiConsumer
-        $apiConsumer = $this->getApiConsumerById($data['api_consumer_id']);
+        $apiConsumer = $this->findApiConsumerById($data['api_consumer_id']);
 
         // Make sure we have a valid ApiConsumer
         if ($apiConsumer instanceof ApiConsumer) {
@@ -283,23 +207,6 @@ class ApiConsumerService
     }
 
     /**
-     * Attempt to retrieve and return an existing ApiConsumer by the email address provided in the reactivation form
-     * or return JsonResponse error.
-     *
-     * @param array $data
-     * @return ApiConsumer|JsonResponse
-     */
-    public function reactivateApiConsumer($data)
-    {
-        // Make sure we received the correct input type
-        miscastVar('array', $data, 'Api Consumer reactivation request data');
-
-        $apiConsumer = $this->getApiConsumerByEmail($data['email']);
-
-        return $apiConsumer;
-    }
-
-    /**
      * Generate a Reset Key for an ApiConsumer, then update and return the ApiConsumer or a JsonResponse error.
      *
      * @param array $data
@@ -307,11 +214,13 @@ class ApiConsumerService
      */
     public function setApiConsumerResetKey($data)
     {
-        // Make sure we received the correct input type
-        miscastVar('array', $data, 'Api Consumer reset key request data');
+        if (app()->environment() == 'local'){
+            // Make sure we received the correct input type
+            $this->miscastVar('array', $data, 'Api Consumer reset key request data');
+        }
 
         // If we received the correct input type, attempt to retrieve the ApiConsumer
-        $apiConsumer = $this->getApiConsumerById($data['consumer_id']);
+        $apiConsumer = $this->findApiConsumerById($data['consumer_id']);
 
         // Make sure we have a valid ApiConsumer
         if ($apiConsumer instanceof ApiConsumer) {

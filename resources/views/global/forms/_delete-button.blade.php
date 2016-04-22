@@ -1,11 +1,11 @@
-@include('global.partials._delete-method-field')
+{{ method_field('DELETE') }}
 <button type="button"
         class="btn btn-danger delete-btn"
         data-toggle="modal"
         data-target="#deleteModal"
 >
-    @if(isset($dlt_btn_txt))
-        {{$dlt_btn_txt}}
+    @if(isset($delete_text))
+        {{$delete_text}}
     @else
         Delete
     @endif

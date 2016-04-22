@@ -19,19 +19,21 @@
                 </td>
                 <td>
                     <ul class="list-inline text-center">
-                        <li style="margin-bottom: 10px; margin-right: 5px;">
+                        <li class="mb10 mr5">
                             <a class="btn btn-default"
                                href="{{action('Admin\AdminApiConsumerController@show', $api_consumer->id)}}"
                             >
                                 View/Edit
                             </a>
                         </li>
-                        <li style="margin-left: 5px;">
-                            <a class="btn btn-danger"
-                               href="{{action('Admin\AdminApiConsumerController@destroy', $api_consumer->id)}}"
+                        <li class="ml5">
+                            <form id="admin-delete-api-consumer-{{$api_consumer->id}}-form"
+                                  method="post"
+                                  action="{{action('Admin\AdminApiConsumerController@destroy', $api_consumer)}}"
+                                  data-modal-text="API Account"
                             >
-                                Delete
-                            </a>
+                                @include('global.forms._delete-button')
+                            </form>
                         </li>
                     </ul>
                 </td>

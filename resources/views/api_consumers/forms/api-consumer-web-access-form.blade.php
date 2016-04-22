@@ -2,39 +2,45 @@
 <form method="POST"
       action="{{action('ApiConsumerController@accessWebApp')}}"
       id="api-consumer-web-access-form"
+      class="form-horizontal"
 >
-    <div id="validation-prefix" data-prefix="api-consumer-web-access-"></div>
     {{ csrf_field() }}
 
     <!-- Email Field -->
     <div class="form-group" id="api-consumer-web-access-email">
-        <label for="email">Email</label>
-        <input type="email"
-               name="email"
-               placeholder="Please enter your API Account email address"
-               class="form-control"
-        >
-        <div class="errlist api-consumer-web-access-email-error-msg"><ul class="mb0"></ul></div>
+        <label for="email" class="col-sm-3 control-label">Email:</label>
+        <div class="col-sm-9">
+            <input type="email"
+                   name="email"
+                   value="{{old('email')}}"
+                   placeholder="Please enter your email"
+                   class="form-control"
+            >
+            @include('global.forms._ajax-errors', ['e_pre' => 'api-consumer-web-access-email'])
+        </div>
     </div>
 
     <!-- API Token Field -->
     <div class="form-group" id="api-consumer-web-access-api_token">
-        <label for="api_token">API Token</label>
-        <input type="text"
-               name="api_token"
-               placeholder="Please enter your API Access Token"
-               class="form-control"
-        >
-        <div class="errlist api-consumer-web-access-api_token-error-msg"><ul class="mb0"></ul></div>
+        <label for="api_token" class="col-sm-3 control-label">
+            <span class="hidden-sm">API </span>Token:
+        </label>
+        <div class="col-sm-9">
+            <input type="text"
+                   name="api_token"
+                   value="{{old('api_token')}}"
+                   placeholder="Please enter your API Token"
+                   class="form-control"
+            >
+            @include('global.forms._ajax-errors', ['e_pre' => 'api-consumer-web-access-api_token'])
+        </div>
     </div>
 
-    <button type="submit"
-            class="btn btn-primary center-block ajax-validate"
-            data-prefix="api-consumer-web-access-"
-    >
-        @include('global.partials._button-wait')
-        <span class="submit-text" data-wait="Authenticating...">
-            Access My Account
-        </span>
-    </button>
+    <!-- Form Submit -->
+    <div class="form-group">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-9">
+            @include('global.forms._ajax-submit-button', ['data_prefix' => 'api-consumer-web-access-', 'data_wait' => 'Authenticating...', 'submit_text' => 'Access My Account'])
+        </div>
+    </div>
 </form>

@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\ApiConsumer;
 use App\Http\Requests;
-use App\Services\ApiConsumer\ApiConsumerWebService;
 use App\Utilities\JwTokenManager;
 use App\Http\Controllers\BaseController;
+use App\Services\ApiConsumer\ApiConsumerWebService;
 use App\Http\Requests\ApiConsumer\ApiConsumerRequest;
 use App\Http\Requests\ApiConsumer\ApiConsumerUpdateRequest;
 use App\Http\Requests\ApiConsumer\ApiConsumerResetKeyRequest;
@@ -41,6 +41,9 @@ class AdminApiConsumerController extends BaseController
         $pageTitle = 'API Consumers Admin Management';
         $apiConsumers = $this->apiGetRequestWithJwt('api-consumer', 'v2');
 
+        $jwt = $this->jwTokenManager->getJwtFromResources($this->getRequestInstance());
+        $user = $this->jwTokenManager->getUserFromJwt($jwt);
+
         return view('api_consumers.admin.admin-index-api-consumer')->with([
             'page_title'    => $pageTitle,
             'api_consumers' => $apiConsumers
@@ -70,7 +73,11 @@ class AdminApiConsumerController extends BaseController
     {
         $apiConsumer = $this->apiPostRequest('api-consumer', $request->all());
 
-        return $this->apiConsumerWebService->getStarterTokenRoute($apiConsumer);
+        if (!json_decode($apiConsumer)) {
+            return $this->apiConsumerWebService->starterTokenErrorResponse($request, $apiConsumer);
+        }
+
+        return $this->apiConsumerWebService->starterTokenSuccessResponse($request, $apiConsumer);
     }
 
 
@@ -97,7 +104,11 @@ class AdminApiConsumerController extends BaseController
     {
         $apiConsumer = $this->apiPostRequest('api-consumer/activate', $request->all());
 
-        return $this->apiConsumerWebService->getActivationRoute($apiConsumer);
+        if (!json_decode($apiConsumer)) {
+            return $this->apiConsumerWebService->activationErrorResponse($request, $apiConsumer);
+        }
+
+        return $this->apiConsumerWebService->activationSuccessResponse($request, $apiConsumer);
     }
 
     /**
@@ -120,7 +131,13 @@ class AdminApiConsumerController extends BaseController
      */
     public function postReactivate(ApiConsumerReactivationRequest $request)
     {
-        return $this->apiConsumerWebService->getReactivationRoute($request->get('email'));
+        $apiConsumer = $this->apiPostRequest('api-consumer/reactivate', $request->all());
+
+        if (!json_decode($apiConsumer)) {
+            return $this->apiConsumerWebService->reactivationNewApiConsumerResponse($request);
+        }
+
+        return $this->apiConsumerWebService->reactivationExistingApiConsumerResponse($request, $apiConsumer);
     }
 
     /**
@@ -131,7 +148,7 @@ class AdminApiConsumerController extends BaseController
      */
     public function show($model)
     {
-        $apiConsumer = $this->apiGetRequest('api-consumer/' . $model->id);
+        $apiConsumer = $this->apiGetRequest('api-consumer/' . $model->id, 'v1', true);
         $pageTitle = 'API Consumer ' . $apiConsumer->id;
 
         return view('api_consumers.admin.admin-show-api-consumer')->with([
@@ -148,9 +165,13 @@ class AdminApiConsumerController extends BaseController
      */
     public function postResetKey(ApiConsumerResetKeyRequest $request)
     {
-        $apiConsumer = $this->apiPostRequest('api-consumer/reset-key', $request->all());
+        $apiConsumer = $this->apiPostRequest('api-consumer/reset-key', $request->all(), 'v1', true);
 
-        return $this->apiConsumerWebService->getAdminResetKeyRoute($apiConsumer);
+        if (!json_decode($apiConsumer)) {
+            return $this->apiConsumerWebService->resetKeyErrorResponse($request, $apiConsumer);
+        }
+
+        return $this->apiConsumerWebService->resetKeySuccessResponse($request, $apiConsumer);
     }
 
     /**
@@ -164,7 +185,11 @@ class AdminApiConsumerController extends BaseController
     {
         $apiConsumer = $this->apiPostRequest('api-consumer/refresh-token', $request->all());
 
-        return $this->apiConsumerWebService->getStarterTokenRoute($apiConsumer);
+        if (!json_decode($apiConsumer)) {
+            return $this->apiConsumerWebService->starterTokenErrorResponse($request, $apiConsumer);
+        }
+
+        return $this->apiConsumerWebService->starterTokenSuccessResponse($request, $apiConsumer);
     }
 
     /**
@@ -176,9 +201,13 @@ class AdminApiConsumerController extends BaseController
      */
     public function update(ApiConsumerUpdateRequest $request, $model)
     {
-        $apiConsumer = $this->apiPutRequest('api-consumer/' . $model->id, $request->all());
+        $apiConsumer = $this->apiPutRequest('api-consumer/' . $model->id, $request->all(), 'v1', true);
 
-        return $this->apiConsumerWebService->getUpdateRoute($apiConsumer);
+        if (!json_decode($apiConsumer)) {
+            return $this->apiConsumerWebService->updateErrorResponse($request, $apiConsumer);
+        }
+
+        return $this->apiConsumerWebService->updateSuccessResponse($request);
     }
 
     /**
@@ -189,6 +218,8 @@ class AdminApiConsumerController extends BaseController
      */
     public function destroy($model)
     {
-        return $this->apiDeleteRequest('api-consumer/' . $model->id);
+        $deleted = $this->apiDeleteRequest('api-consumer/' . $model->id, 'v1', true);
+
+        return $this->apiConsumerWebService->getDeleteResponse($this->getRequestInstance(), $deleted);
     }
 }

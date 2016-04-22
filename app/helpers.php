@@ -40,143 +40,41 @@ function getDelimitedStringFromArray($array, $delimiter)
 }
 
 /**
- * Return the information from a JsonResponse in an array.
+ * Get the ID of a model from the route path of the page that a form request originated from. If the route is a
+ * standard 'MODELNAME/MODELID', the MODELID will be popped off the end, otherwise the index of the model ID within
+ * the path should be passed through, and that value will be returned.
  *
- * @param \Illuminate\Http\JsonResponse $json
- * @return array
+ * @param int|null $num
+ * @return mixed
  */
-function getJsonInfoArray(\Illuminate\Http\JsonResponse $json)
+function getModelMatch($num = null)
 {
-    $status = $json->getStatusCode();
-    $info = $json->getData('message');
-    $message = $info['message'];
+    $route = Session::previousUrl();
+    $routeParts = explode('/', $route);
 
-    return ['message' => $message, 'status' => $status];
+    return $num === null ? array_pop($routeParts) : $routeParts[$num - 1];
 }
 
 /**
- * Get and return the subdomain (if there is one, and it isn't 'www') from a Request.
+ * Retrieve and return a specific cookie value by it's key from the Request header.
  *
- * @param null $request
- * @return string|null
+ * @param \Illuminate\Http\Request $request
+ * @param string $key
+ * @return string
  */
-function getSubdomain($request = null)
+function getHeaderCookie(\Illuminate\Http\Request $request, $key)
 {
-    // If a request object was not provided, capture the request
-    if ($request == null) {
-        $request = getCapturedRequest();
-    }
+    $cookies = $request->header('cookie');
+    $cookieParts = explode(' ', $cookies);
 
-    $host = $request->server('HTTP_HOST');
-    $host_parts = explode('.', $host);
+    $cookie = '';
 
-    $subdomain = count($host_parts) > 2 ? $host_parts[0] : null;
-
-    if ($subdomain == 'www') {
-        $subdomain = null;
-    }
-
-    return $subdomain;
-}
-
-/**
- * Set the status code for a JsonResponse based on the error provided by an Exception (or not) and a backup code.
- *
- * @param Exception $e
- * @param int $backup
- * @return int
- */
-function setStatus($e, $backup)
-{
-    // If the exception does not have an explicitly defined HTTP status code...
-    if (!$status = $e->getCode()) {
-        // Return the backup error code instead
-        return $backup;
-    }
-    // If the exception code is not an HTTP status code...
-    if ($status > 530) {
-        return $backup;
-    }
-
-    return $status;
-}
-
-/**
- * In the event that a request object is unknown, capture the request and return the instance.
- *
- * @return $this
- */
-function getCapturedRequest()
-{
-    $request = \Illuminate\Http\Request::capture();
-
-    return $request->instance();
-}
-
-/**
- * Determine whether the correct variable type has been provided to a method, and return false if it has or return a
- * JsonResponse customized error message if it has not.
- *
- * @param string $expected - The type of variable that was expected,
- *                           Can be one of: 'array', 'string', 'int', 'num', 'intnum'
- * @param mixed $var - The variable that was provided
- * @param null $help - An OPTIONAL helper message to explain exactly what was expected
- * @return \Illuminate\Http\JsonResponse
- */
-function miscastVar($expected, $var, $help = null)
-{
-    // Get the actual type of the variable that was passed through
-    $type = gettype($var);
-    // Instantiate empty string for message start
-    $mStart = '';
-    // Set execute to false so nothing will happen if the variable type is correct
-    $execute = false;
-
-    switch ($expected) {
-        case 'array':
-            if ($type != 'array') {
-                $mStart = 'an ARRAY';
-                $execute = true;
-            }
+    foreach ($cookieParts as $crumb) {
+        if (substr($crumb, 0, strlen($key)) === $key) {
+            $cookie .= trim(ltrim($crumb, $key));
             break;
-        case 'string':
-            if ($type != 'string') {
-                $mStart = 'a STRING';
-                $execute = true;
-            }
-            break;
-        case 'int':
-            if ($type != 'integer') {
-                $mStart = 'an INTEGER';
-                $execute = true;
-            }
-            break;
-        case 'numeric':
-            if (!is_numeric($var)) {
-                $mStart = 'a NUMBER';
-                $execute = true;
-            }
-            break;
-        case 'intnum': // Integer cast to string by API (can only be checked as numeric)
-            if (!is_numeric($var)) {
-                $mStart = 'an INTEGER';
-                $execute = true;
-            }
-            break;
-        default:
-            $execute = false;
-            $mStart = '';
-    }
-
-    // If the variable was miscast, return the JsonResponse error with the customized message
-    if ($execute == true) {
-        // Inject the help message if one was provided
-        if ($help != null) {
-            $mStart .= ' (' . $help . ')';
         }
-        // Set the end of the JsonResponse error message
-        $mEnd = ' is required, but a variable of type ' . strtoupper($type) . 'was provided instead.';
-
-        return response()->json(['message' => $mStart . $mEnd], 422);
     }
+
+    return $cookie;
 }

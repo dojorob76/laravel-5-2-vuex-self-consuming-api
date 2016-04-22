@@ -5,6 +5,8 @@
 | ADMIN Subdomain Routes
 |--------------------------------------------------------------------------
 */
+// ADMIN LANDING PAGE/DASHBOARD
+Route::get('admin-dashboard', 'AdminDashboardController@index');
 
 // Api Consumer Routes
 Route::get('admin-api-consumer/activate', 'AdminApiConsumerController@getActivate');

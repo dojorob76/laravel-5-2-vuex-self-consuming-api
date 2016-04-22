@@ -176,20 +176,14 @@ class ApiTokenManager
      */
     public function getTokenFromRequest($request)
     {
-        // Get the token from the session or query, depending on which subdomain we are on
-        if (getSubdomain($request) != 'api') {
-            // Get the token from the session - the user is on the web app
-            $token = session()->has('api_consumer_token') ? session('api_consumer_token') : false;
+        if ($request->has('api_access_token')) {
+            return $request->get('api_access_token');
+        } elseif (session()->has('api_consumer_token')) {
             // We need to do a verify check in this case, because we are not nested under the api.access middleware
-            if (!$token || !$this->verifyApiToken($token)) {
-                return false;
-            }
+            return !$this->verifyApiToken(session('api_consumer_token')) ? false : session('api_consumer_token');
         } else {
-            // Get the token from the query string - the user is accessing the API
-            $token = $request->has('api_access_token') ? $request->get('api_access_token') : false;
+            return false;
         }
-
-        return $token;
     }
 
     /**
