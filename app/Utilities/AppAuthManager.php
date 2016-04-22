@@ -29,13 +29,6 @@ class AppAuthManager
      */
     protected $redirectTo = '/home';
 
-    /**
-     * The paths for the various authentication routes (Login Route, Register Route, Logout Route).
-     *
-     * @var array
-     */
-    protected $authRoutes = ['login', 'register', 'logout'];
-
     public function __construct(JwTokenManager $jwTokenManager, UserService $userService)
     {
         $this->jwTokenManager = $jwTokenManager;
@@ -95,7 +88,12 @@ class AppAuthManager
     public function setRedirectRoute()
     {
         if (!session()->has('auth_redirect')) {
-            $initialRoute = session()->previousUrl();
+            $intended = null;
+            if (session()->has('url') && array_key_exists('intended', session('url'))) {
+                $url = session('url');
+                $intended = $url['intended'];
+            }
+            $initialRoute = $intended == null ? session()->previousUrl() : $intended;
             $routeParts = explode('/', $initialRoute);
 
             if (!in_array(array_pop($routeParts), $this->authRoutes)) {

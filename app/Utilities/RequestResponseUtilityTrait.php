@@ -13,6 +13,20 @@ trait RequestResponseUtilityTrait
 {
 
     /**
+     * The paths for the various authentication routes (Login Route, Register Route, Logout Route).
+     *
+     * @var array
+     */
+    public $authRoutes = ['login', 'register', 'logout'];
+
+    /**
+     * The name of the admin subdomain (i.e., 'admin.myapp.com' where 'admin' is the name)
+     *
+     * @var string
+     */
+    public $adminSubdomain = 'admin';
+
+    /**
      * @param Request|null $request
      * @return $this|Request
      */
@@ -57,28 +71,38 @@ trait RequestResponseUtilityTrait
     public function getPathForSubdomain($path, Request $r = null)
     {
         $request = $this->getRequestInstance($r);
+
         // Get the subdomain that we are currently in
         $subdomain = $this->getSubdomain($request);
-        // Get the url protocol to build the absolute path
+
+        // Get the url protocol to build an absolute path
         $h = env('URL_PROTOCOL');
+
         // Make sure we're not already dealing with an absolute path
         if (substr($path, 0, strlen($h)) == $h) {
-            // We have an absolute path
             $removeChars = strlen($h . $request->server('HTTP_HOST'));
+            // Set the path variable without the Protocol and Host
             $path = substr($path, $removeChars);
         }
+
         // Prepend the '/' to the path if it is not already there for use in absolute URL
         if (substr($path, 0, 1) != '/') {
             $path = '/' . $path;
         }
+
+        // If we are trying to reach an Auth Route, build the path now
+        if (in_array(ltrim($path, '/'), $this->authRoutes)) {
+            return $h . env('APP_MAIN') . $path;
+        }
+
+        // Build up the correct path for a subdomain
         $subPath = '/' . $subdomain . '-' . ltrim($path, '/');
 
         // Only do this if we are not trying to access the home page
-        if($path != '/'){
+        if ($path != '/') {
             // Generate the appropriate absolute path based on sub(or main)domain
             $route = !$subdomain ? $h . env('APP_MAIN') . $path : $h . $subdomain . env('SESSION_DOMAIN') . $subPath;
-        }
-        else{
+        } else {
             $route = $h . env('APP_MAIN');
         }
 

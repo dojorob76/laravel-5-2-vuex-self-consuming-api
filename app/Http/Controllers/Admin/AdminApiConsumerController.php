@@ -38,11 +38,14 @@ class AdminApiConsumerController extends BaseController
      */
     public function index()
     {
-        $pageTitle = 'API Consumers Admin Management';
         $apiConsumers = $this->apiGetRequestWithJwt('api-consumer', 'v2');
 
-        $jwt = $this->jwTokenManager->getJwtFromResources($this->getRequestInstance());
-        $user = $this->jwTokenManager->getUserFromJwt($jwt);
+        if(!json_decode($apiConsumers)){
+            // The JWT validation did not pass - Admin needs to log in again
+            return $this->getRedirectResponseForRequest('logout', 401);
+        }
+
+        $pageTitle = 'API Consumers Admin Management';
 
         return view('api_consumers.admin.admin-index-api-consumer')->with([
             'page_title'    => $pageTitle,
@@ -149,6 +152,12 @@ class AdminApiConsumerController extends BaseController
     public function show($model)
     {
         $apiConsumer = $this->apiGetRequest('api-consumer/' . $model->id, 'v1', true);
+
+        if(!json_decode($apiConsumer)){
+            // Validation did not pass - Admin needs to log in again
+            return $this->getRedirectResponseForRequest('logout', 401);
+        }
+
         $pageTitle = 'API Consumer ' . $apiConsumer->id;
 
         return view('api_consumers.admin.admin-show-api-consumer')->with([

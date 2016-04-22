@@ -1,5 +1,7 @@
 @extends('layouts.admin.admin-layout')
 
+@inject('bouncer', 'Silber\Bouncer\Bouncer')
+
 @section('admin-content')
     <div class="container-fluid">
         <div class="row">
@@ -28,15 +30,17 @@
                     </p>
 
                     <hr class="col-sm-10 col-xs-12 col-sm-offset-1 pr0 pl0">
-                </div>
 
-                @include('api_consumers.admin.partials._admin-api-consumer-index-table')
+                    @include('api_consumers.admin.partials._admin-api-consumer-index-table')
+                </div>
 
                 <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pr0 pl0">
             </div>
         </div>
     </div>
-    @include('global.modals.delete-modal')
+    @unless($api_consumer->isSystemAccount() && $bouncer->denies('delete-system-api-accounts', $api_consumer))
+        @include('global.modals.delete-modal')
+    @endunless
 @endsection
 
 @section('postscripts')
