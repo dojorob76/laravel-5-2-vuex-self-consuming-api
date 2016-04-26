@@ -53,7 +53,7 @@ class AppAuthManager
         Auth::login($user);
 
         // Display registration success feedback
-        flasher()->bsSuccessDismiss('Welcome to ' . env('SITE_NAME') . '! Your new account has been created.');
+        flasher()->vueSuccessTimed('Welcome to ' . env('SITE_NAME') . '! Your new account has been created.');
 
         // Attempt to set a JWT on the User, and redirect with feedback accordingly
         return $this->setJwtOnUser($user, $request);
@@ -73,7 +73,7 @@ class AppAuthManager
         }
 
         // Display log out feedback
-        flasher()->bsInfoDismiss('Thank you for visiting ' . env('SITE_NAME') . '. You are now logged out.', 'Goodbye');
+        flasher()->vueInfoTimed('Thank you for visiting ' . env('SITE_NAME') . '. You are now logged out.', 'Goodbye');
 
         // Remove the JWT from the User session on redirect
         $cookie = $this->jwTokenManager->setJwtCookieExpired();
@@ -134,6 +134,23 @@ class AppAuthManager
     }
 
     /**
+     * Check the validity of a JWT for the auth-store JS and return appropriate JsonResponse.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getJwtValidationAjax(Request $request)
+    {
+        $jwt = $this->jwTokenManager->getJwtFromResources($request);
+
+        if (!$this->jwTokenManager->validateJwt($request, $jwt)) {
+            return response()->json(['message' => 'The JWT could not be validated.'], 401);
+        }
+
+        return response()->json(['jwtoken' => $jwt], 200);
+    }
+
+    /**
      * OVERRIDE this 'AuthenticatesUsers' Trait method to simply return null, as our validation has already been handled
      * by the UserLoginFormRequest.
      * ORIGINAL: \Illuminate\Foundation\Auth\AuthenticatesUsers@validateLogin
@@ -165,7 +182,7 @@ class AppAuthManager
         }
 
         // Display Log in success feedback
-        flasher()->bsSuccessDismiss('Welcome back, ' . Auth::user()->name . '! You are now logged in.');
+        flasher()->vueSuccessTimed('Welcome back, ' . Auth::user()->name . '! You are now logged in.');
 
         // Set the variable to update the User's 'token_key' column with
         $tokenKey = $request->get('token_key');
@@ -183,7 +200,7 @@ class AppAuthManager
      */
     protected function sendFailedLoginResponse(UserLoginRequest $request)
     {
-        flasher()->bsError($this->getFailedLoginMessage());
+        flasher()->vueErrorDismiss($this->getFailedLoginMessage());
 
         return $this->getFailedAuthResponse($request);
     }
@@ -199,7 +216,7 @@ class AppAuthManager
     {
         $seconds = $this->secondsRemainingOnLockout($request);
 
-        flasher()->bsError($this->getLockoutErrorMessage($seconds));
+        flasher()->vueErrorDismiss($this->getLockoutErrorMessage($seconds));
 
         return $this->getFailedAuthResponse($request);
     }

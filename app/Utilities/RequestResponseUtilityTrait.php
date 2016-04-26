@@ -17,7 +17,7 @@ trait RequestResponseUtilityTrait
      *
      * @var array
      */
-    public $authRoutes = ['login', 'register', 'logout'];
+    public $authRoutes = ['authenticate', 'logout'];
 
     /**
      * The name of the admin subdomain (i.e., 'admin.myapp.com' where 'admin' is the name)

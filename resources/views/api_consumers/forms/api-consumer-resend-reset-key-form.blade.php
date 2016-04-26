@@ -10,7 +10,7 @@
             data-prefix="api-consumer-resend-reset-key-"
     >
         @include('global.partials._button-wait')
-        <span class="submit-text" data-wait="Resending Email">
+        <span class="orig-text" data-wait="Resending Email...">
             Resend Reset Key
         </span>
     </button>

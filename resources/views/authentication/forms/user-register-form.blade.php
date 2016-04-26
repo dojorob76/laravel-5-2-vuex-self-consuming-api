@@ -1,10 +1,13 @@
-<form class="form-horizontal" role="form" method="POST" action="{{ url('/register') }}" id="user-register-form">
-    {!! csrf_field() !!}
-
-            <!-- (HIDDEN) TOKEN KEY Field -->
+<form class="form-horizontal"
+      role="form"
+      method="POST"
+      action="{{ action('AuthenticationController@postRegister') }}"
+      id="user-register-form"
+      v-on:submit.prevent="submitAppRegisterForm"
+>
+    <!-- (HIDDEN) TOKEN KEY Field -->
     <div class="form-group" id="user-register-token_key">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <input type="hidden" name="token_key" value="{{csrf_token()}}">
             @include('global.forms._ajax-errors', ['e_pre' => 'user-register-token_key', 'e_class' => 'rounded'])
         </div>
     </div>
@@ -14,7 +17,12 @@
         <label class="col-md-4 control-label">Name:</label>
 
         <div class="col-md-6">
-            <input type="text" class="form-control" name="name" value="{{ old('name') }}">
+            <input type="text"
+                   class="form-control"
+                   name="name"
+                   value="{{ old('name') }}"
+                   v-model="appRegisterFields.name"
+            >
             @include('global.forms._ajax-errors', ['e_pre' => 'user-register-name'])
         </div>
     </div>
@@ -24,7 +32,12 @@
         <label class="col-md-4 control-label">E-Mail:</label>
 
         <div class="col-md-6">
-            <input type="email" class="form-control" name="email" value="{{ old('email') }}">
+            <input type="email"
+                   class="form-control"
+                   name="email"
+                   value="{{ old('email') }}"
+                   v-model="appRegisterFields.email"
+            >
             @include('global.forms._ajax-errors', ['e_pre' => 'user-register-email'])
         </div>
     </div>
@@ -34,7 +47,11 @@
         <label class="col-md-4 control-label">Password:</label>
 
         <div class="col-md-6">
-            <input type="password" class="form-control" name="password">
+            <input type="password"
+                   class="form-control"
+                   name="password"
+                   v-model="appRegisterFields.password"
+            >
             @include('global.forms._ajax-errors', ['e_pre' => 'user-register-password'])
         </div>
     </div>
@@ -44,7 +61,11 @@
         <label class="col-md-4 control-label">Confirm Password:</label>
 
         <div class="col-md-6">
-            <input type="password" class="form-control" name="password_confirmation">
+            <input type="password"
+                   class="form-control"
+                   name="password_confirmation"
+                   v-model="appRegisterFields.password_confirmation"
+            >
             @include('global.forms._ajax-errors', ['e_pre' => 'user-register-password_confirmation'])
         </div>
     </div>
@@ -52,12 +73,9 @@
     <!-- SUBMIT Button -->
     <div class="form-group">
         <div class="col-md-6 col-md-offset-4">
-            <button type="submit" class="btn btn-primary ajax-auth" data-prefix="user-register-">
-                @include('global.partials._button-wait')
-                <span class="submit-text" data-wait="Creating Account...">
-                    <span class="glyphicon glyphicon-user"></span> Register
-                </span>
-            </button>
+            <feedback-button wait-txt="Creating Account..." btn-type="submit" btn-class="primary">
+                <span class="glyphicon glyphicon-user"></span> Register
+            </feedback-button>
         </div>
     </div>
 </form>

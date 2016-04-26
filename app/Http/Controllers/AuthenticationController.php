@@ -45,17 +45,17 @@ class AuthenticationController extends BaseController
     }
 
     /**
-     * Display the register page.
+     * Display the Authentication page (Log in/Registration forms).
      *
      * @return $this
      */
-    public function getRegister()
+    public function getAuthenticate()
     {
         $this->appAuth->setRedirectRoute();
 
-        $pageTitle = 'Register a New ' . env('SITE_NAME') . ' Account';
+        $pageTitle = 'Log In or Register';
 
-        return view('authentication.register')->with(['page_title' => $pageTitle]);
+        return view('authentication.authenticate')->with(['page_title' => $pageTitle]);
     }
 
     /**
@@ -73,20 +73,6 @@ class AuthenticationController extends BaseController
         }
 
         return $this->appAuth->registerUser($user, $request);
-    }
-
-    /**
-     * Display the log in page.
-     *
-     * @return $this
-     */
-    public function getLogin()
-    {
-        $this->appAuth->setRedirectRoute();
-
-        $pageTitle = 'Log In to ' . env('SITE_NAME');
-
-        return view('authentication.login')->with(['page_title' => $pageTitle]);
     }
 
     /**
@@ -109,5 +95,16 @@ class AuthenticationController extends BaseController
     public function getLogout(Request $request)
     {
         return $this->appAuth->logoutUser($request);
+    }
+
+    /**
+     * Verify a JWT via AJAX.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getTokenVerification(Request $request)
+    {
+        return $this->appAuth->getJwtValidationAjax($request);
     }
 }

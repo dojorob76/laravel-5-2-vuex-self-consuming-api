@@ -45,7 +45,7 @@ class ApiConsumerWebService extends ApiConsumerService
         // Remove the WebAccessToken in the ApiConsumer's session
         $this->apiTokenManager->removeWebAccessToken();
         // Generate a successful log out message for the ApiConsumer
-        flasher()->bsSuccessDismiss('You are now logged out of your API Account.', 'Goodbye');
+        flasher()->vueSuccessTimed('You are now logged out of your API Account.', 'Goodbye');
 
         // Redirect to the ApiConsumer index page
         return $this->getRedirectResponseForRequest('api-consumer', 200);
@@ -66,7 +66,7 @@ class ApiConsumerWebService extends ApiConsumerService
         // Add the validWebAccessToken to the ApiConsumer's session
         $this->apiTokenManager->setValidWebAccessToken($token);
         // Display a success message to the ApiConsumer
-        flasher()->bsSuccessDismiss('You are now logged in to your API Account.', 'Welcome!');
+        flasher()->vueSuccessTimed('You are now logged in to your API Account.', 'Welcome!');
 
         // Redirect to the ApiConsumer's Settings Page
         return $this->getRedirectResponseForRequest('api-consumer/' . $apiConsumer->id, 200, $request);
@@ -88,7 +88,7 @@ class ApiConsumerWebService extends ApiConsumerService
 
         // Display an instructional message to the ApiConsumer
         $message = 'Your new API Access Token is not yet active. Please record and activate it now.';
-        flasher()->bsInfo($message, 'Step One Complete');
+        flasher()->vueInfo($message, 'Step One Complete');
 
         // If we are not in the admin subdomain, add the PreWebAccess token to the ApiConsumer's session
         if ($this->getSubdomain($request) != 'admin') {
@@ -107,7 +107,7 @@ class ApiConsumerWebService extends ApiConsumerService
     public function activationSuccessResponse($request, $apiConsumer)
     {
         // Display a success message to the ApiConsumer
-        flasher()->bsSuccessDismiss('Your New API Access Token is now active!');
+        flasher()->vueSuccessDismiss('Your New API Access Token is now active!');
 
         // If we are not in the admin subdomain, add the validatable WebAccessToken to the ApiConsumer's session
         if ($this->getSubdomain($request) != 'admin') {
@@ -127,7 +127,7 @@ class ApiConsumerWebService extends ApiConsumerService
     {
         if ($this->getSubdomain($request) == 'admin') {
             // Add the reset key to the session to display on the page
-            flasher()->bsInfo($apiConsumer->reset_key, 'Reset Key');
+            flasher()->vueInfo($apiConsumer->reset_key, 'Reset Key');
         } else {
             // Queue up an email to the ApiConsumer with their reset key
             $job = (new SendApiResetKeyEmail($apiConsumer));
@@ -135,7 +135,7 @@ class ApiConsumerWebService extends ApiConsumerService
 
             // Display a success message to the ApiConsumer
             $msg = 'An email containing your reset key has been sent to ' . $apiConsumer->email . '.';
-            flasher()->bsSuccessDismiss($msg);
+            flasher()->vueSuccessDismiss($msg);
         }
 
         return $this->getReloadResponseForRequest(200, $request);
@@ -148,7 +148,7 @@ class ApiConsumerWebService extends ApiConsumerService
     public function updateSuccessResponse(Request $request)
     {
         // Display a success message
-        flasher()->bsSuccessDismiss('The settings have been successfully updated.');
+        flasher()->vueSuccessTimed('The settings have been successfully updated.');
 
         return $this->getReloadResponseForRequest(200, $request);
     }
@@ -159,7 +159,7 @@ class ApiConsumerWebService extends ApiConsumerService
      */
     public function reactivationNewApiConsumerResponse(Request $request){
         $msg = 'This email address is not associated with an existing API Account. Create a new account now.';
-        flasher()->bsInfo($msg);
+        flasher()->vueInfo($msg);
         // Flash the email address to the session to be used in the create form
         session()->flash('email_address', $request->get('email'));
         // Redirect to the main/sub domain appropriate create page
@@ -179,7 +179,7 @@ class ApiConsumerWebService extends ApiConsumerService
         }
         // The ApiConsumer with this email address currently has an active token, so display that message
         $msg = 'The API Access Token for this account is already active. Please log in to refresh it.';
-        flasher()->bsErrorDismiss($msg);
+        flasher()->vueError($msg);
 
         // Redirect to the main/sub domain appropriate index page
         return $this->getRedirectResponseForRequest('api-consumer', 202, $request);
@@ -193,7 +193,7 @@ class ApiConsumerWebService extends ApiConsumerService
     public function starterTokenErrorResponse(Request $request, JsonResponse $jsonError)
     {
         // Display feedback to the user
-        flasher()->bsError('Whoops! Something went wrong. Please try again.');
+        flasher()->vueError('Whoops! Something went wrong. Please try again.');
 
         // Redirect to the main/sub domain appropriate reactivate page
         return $this->getRedirectResponseForRequest('api-consumer/reactivate', $jsonError->getStatusCode(), $request);
@@ -207,7 +207,7 @@ class ApiConsumerWebService extends ApiConsumerService
     public function activationErrorResponse($request, $jsonError)
     {
         // Display an error message to the ApiConsumer
-        flasher()->bsError('Activation was unsuccessful. Please try again.');
+        flasher()->vueError('Activation was unsuccessful. Please try again.');
 
         // Redirect to the main/sub domain appropriate reactivation page
         return $this->getRedirectResponseForRequest('api-consumer/reactivate', $jsonError->getStatusCode(), $request);
@@ -232,7 +232,7 @@ class ApiConsumerWebService extends ApiConsumerService
             $title = 'Whoops!';
         }
 
-        flasher()->bsError($message, $title);
+        flasher()->vueErrorDismiss($message, $title);
 
         return $this->getReloadResponseForRequest($info['status'], $request);
     }
@@ -245,7 +245,7 @@ class ApiConsumerWebService extends ApiConsumerService
     public function updateErrorResponse(Request $request, JsonResponse $jsonError)
     {
         // Display an error message
-        flasher()->bsError('The update was unsuccessful. Please try again.');
+        flasher()->vueErrorDismiss('The update was unsuccessful. Please try again.');
 
         return $this->getReloadResponseForRequest($jsonError->getStatusCode(), $request);
     }
@@ -266,14 +266,14 @@ class ApiConsumerWebService extends ApiConsumerService
             }
             // If this is not an AJAX delete, display feedback to the user
             if (!$request->ajax() && !$request->wantsJson()) {
-                flasher()->bsSuccessDismiss('The API Account has been deleted.');
+                flasher()->vueSuccessTimed('The API Account has been deleted.');
             }
 
             return $this->getRedirectResponseForRequest($path, 200, $request);
         }
         // If this is not an AJAX delete, display feedback to the user
         if (!$request->ajax() && !$request->wantsJson()) {
-            flasher()->bsErrorDismiss('The API Account could not be deleted.');
+            flasher()->vueErrorDismiss('The API Account could not be deleted.');
         }
 
         // The deletion was unsuccessful, so reload the current page

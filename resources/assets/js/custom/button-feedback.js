@@ -1,26 +1,26 @@
 var buttonFeedback = {
     formSubmit: function (form, display) {
         var submit = form.find(':submit');
-        var submitText = submit.find('.submit-text');
+        var origText = submit.find('.orig-text');
         var submitWait = submit.find('.btn-wait-content');
-        var submitWaitText = submitText.data('wait') ? submitText.data('wait') : 'Working...';
+        var submitWaitText = origText.data('wait') ? origText.data('wait') : 'Working...';
 
         if (display == 'show') {
-            this.showWaitFeedback(submit, submitText, submitWait, submitWaitText);
+            this.showWaitFeedback(submit, origText, submitWait, submitWaitText);
         }
 
         if (display == 'hide') {
-            this.hideWaitFeedback(submit, submitText, submitWait);
+            this.hideWaitFeedback(submit, origText, submitWait);
         }
     },
 
     buttonClick: function (btn, display) {
-        var buttonText = btn.find('.button-text');
+        var origText = btn.find('.orig-text');
         var buttonWait = btn.find('.btn-wait-content');
-        var buttonWaitText = buttonText.data('wait') ? buttonText.data('wait') : 'Loading. Please Wait...';
+        var buttonWaitText = origText.data('wait') ? origText.data('wait') : 'Loading. Please Wait...';
 
         if (display == 'show') {
-            this.showWaitFeedback(btn, buttonText, buttonWait, buttonWaitText);
+            this.showWaitFeedback(btn, origText, buttonWait, buttonWaitText);
             if (btn.is(':submit')) {
                 // This is a form, so let's make sure it gets submitted
                 var form = btn.closest('form');
@@ -29,7 +29,7 @@ var buttonFeedback = {
         }
 
         if (display == 'hide') {
-            this.hideWaitFeedback(btn, buttonText, buttonWait);
+            this.hideWaitFeedback(btn, origText, buttonWait);
         }
     },
 
