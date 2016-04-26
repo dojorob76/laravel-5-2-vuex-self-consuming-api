@@ -38,9 +38,7 @@
             </div>
         </div>
     </div>
-    @unless($api_consumer->isSystemAccount() && $bouncer->denies('delete-system-api-accounts', $api_consumer))
-        @include('global.modals.delete-modal')
-    @endunless
+    @include('global.modals.delete-modal')
 @endsection
 
 @section('postscripts')
