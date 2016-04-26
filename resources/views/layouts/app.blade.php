@@ -30,7 +30,7 @@
         @yield('headstyles')
     </head>
 
-    <body>
+    <body id="vueapp"><!-- << Global Vue el ID -->
         <!-- Load the Header Navigation -->
         @yield('header-nav')
 
@@ -42,6 +42,9 @@
 
         <!-- Load additional, page-specific, footer JS -->
         @yield('postscripts')
+
+        <!-- Vue Core Script -->
+        <script src="{{elixir('js/bundle.js')}}"></script>
     </body>
 
 </html>

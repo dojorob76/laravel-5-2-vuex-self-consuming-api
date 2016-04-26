@@ -14,9 +14,9 @@
 
     <div class="form-group">
         <div class="col-md-6 col-md-offset-4">
-            <button type="submit" class="btn btn-primary">
+            <feedback-button wait-txt="Sending Link..." ext-class=" add-feedback">
                 <span class="glyphicon glyphicon-envelope"></span> Send Password Reset Link
-            </button>
+            </feedback-button>
         </div>
     </div>
 </form>

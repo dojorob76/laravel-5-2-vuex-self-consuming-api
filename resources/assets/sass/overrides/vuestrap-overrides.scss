@@ -1,0 +1,20 @@
+//-------------------------------------------------------------------------------------------------------------------
+// This file contains the style overrides for the 'VueStrap' components https://github.com/yuche/vue-strap/
+//-------------------------------------------------------------------------------------------------------------------
+// Make the top and top-right alerts display underneath the nav header
+.alert {
+    &.top, &.top-right {
+        //position: fixed;
+        top: 60px !important;
+        margin: 0 auto;
+        z-index: 2;
+        box-shadow: 0 0 1.5px 1.5px rgba(34, 34, 34, 0.25);
+    }
+    &.top {
+        left: 0;
+        right: 0;
+    }
+    &.top-right {
+        right: 50px;
+    }
+}

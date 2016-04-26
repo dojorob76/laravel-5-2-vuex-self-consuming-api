@@ -3,7 +3,7 @@
         data-prefix="{{$data_prefix}}"
 >
     @include('global.partials._button-wait')
-    <span class="submit-text"
+    <span class="orig-text"
           @if(isset($data_wait))
             data-wait="{{$data_wait}}"
           @endif

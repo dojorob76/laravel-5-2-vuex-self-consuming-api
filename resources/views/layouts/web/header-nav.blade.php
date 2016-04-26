@@ -13,8 +13,7 @@
             <ul class="nav navbar-nav navbar-right">
                 <!-- Authentication Links -->
                 @if (Auth::guest())
-                    <li><a href="{{ url('/login') }}">Login</a></li>
-                    <li><a href="{{ url('/register') }}">Register</a></li>
+                    <li><a href="{{action('AuthenticationController@getAuthenticate')}}">Sign In</a></li>
                 @else
                     @can('access-admin-subdomain')
                         <li><a href="{{action('Admin\AdminDashboardController@index')}}">Admin Dashboard</a></li>

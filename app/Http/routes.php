@@ -12,9 +12,8 @@ Route::get('/home', 'HomeController@index');
 |--------------------------------------------------------------------------
 */
 // App Registration, Login and Logout Routes
-Route::get('register', 'AuthenticationController@getRegister');
+Route::get('authenticate', 'AuthenticationController@getAuthenticate');
 Route::post('register', 'AuthenticationController@postRegister');
-Route::get('login', 'AuthenticationController@getLogin');
 Route::post('login', 'AuthenticationController@postLogin');
 Route::get('logout', 'AuthenticationController@getLogout');
 
@@ -22,6 +21,9 @@ Route::get('logout', 'AuthenticationController@getLogout');
 Route::get('password/reset/{token?}', 'AuthenticationController@showResetForm');
 Route::post('password/email', 'AuthenticationController@sendResetLinkEmail');
 Route::post('password/reset', 'AuthenticationController@reset');
+
+// JWT Verification Route
+Route::get('verify-token', 'AuthenticationController@getTokenVeirfication');
 
 /*
 |--------------------------------------------------------------------------

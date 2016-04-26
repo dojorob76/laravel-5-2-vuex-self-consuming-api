@@ -5851,6 +5851,9 @@ button.close {
 .form-inline .has-error .form-control {
   border-radius: 4px; }
 
+[v-cloak] {
+  display: none; }
+
 .bold {
   font-weight: 700; }
 
@@ -6008,5 +6011,18 @@ button.close {
   -webkit-margin-before: 0 !important;
   -webkit-margin-after: 0 !important;
   -webkit-padding-start: 5px !important; }
+
+.alert.top, .alert.top-right {
+  top: 60px !important;
+  margin: 0 auto;
+  z-index: 2;
+  box-shadow: 0 0 1.5px 1.5px rgba(34, 34, 34, 0.25); }
+
+.alert.top {
+  left: 0;
+  right: 0; }
+
+.alert.top-right {
+  right: 50px; }
 
 /*# sourceMappingURL=app.css.map */

@@ -54,9 +54,9 @@
     <!-- SUBMIT Button -->
     <div class="form-group">
         <div class="col-md-6 col-md-offset-4">
-            <button type="submit" class="btn btn-primary">
+            <feedback-button wait-txt="Updating Password..." ext-class=" add-feedback">
                 <span class="glyphicon glyphicon-refresh"></span> Reset Password
-            </button>
+            </feedback-button>
         </div>
     </div>
 </form>

@@ -19,7 +19,7 @@
                                        href="{{action('ApiConsumerController@create')}}"
                                     >
                                         @include('global.partials._button-wait')
-                                        <span class="button-text">Create API Account</span>
+                                        <span class="orig-text">Create API Account</span>
                                     </a>
                                 @endif
                             </div>

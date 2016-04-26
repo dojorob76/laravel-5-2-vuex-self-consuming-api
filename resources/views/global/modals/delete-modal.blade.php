@@ -26,7 +26,7 @@
                 </button>
                 <button type="button" class="btn btn-danger modal-delete">
                     @include('global.partials._button-wait')
-                    <span class="button-text" data-wait="Deleting...">Yes, Delete</span>
+                    <span class="orig-text" data-wait="Deleting...">Yes, Delete</span>
                 </button>
             </div>
 

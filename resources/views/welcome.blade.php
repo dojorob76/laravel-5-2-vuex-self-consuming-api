@@ -9,6 +9,18 @@
 
                 <div class="panel-body">
                     Your Application's Landing Page.
+                    <div v-if="authorized">
+                        <h4 class="text-center">You are logged in</h4>
+                    </div>
+                    <div v-else>
+                        <p class="text-center">
+                            <a href="{{action('AuthenticationController@getAuthenticate')}}"
+                               class="btn btn-default"
+                            >
+                                Sign In
+                            </a>
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
