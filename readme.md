@@ -1,27 +1,14 @@
-# Laravel PHP Framework
+### Laravel 5.2 Self-Consuming Public API With Multiple Subdomains and Vue.js
 
-[![Build Status](https://travis-ci.org/laravel/framework.svg)](https://travis-ci.org/laravel/framework)
-[![Total Downloads](https://poser.pugx.org/laravel/framework/d/total.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Stable Version](https://poser.pugx.org/laravel/framework/v/stable.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Unstable Version](https://poser.pugx.org/laravel/framework/v/unstable.svg)](https://packagist.org/packages/laravel/framework)
-[![License](https://poser.pugx.org/laravel/framework/license.svg)](https://packagist.org/packages/laravel/framework)
+This project is a modification of my original 
+[Laravel 5.2 Self-Consuming API](https://github.com/dojorob76/laravel-5-2-self-consuming-api) starter app which is 
+built on the [Laravel 5.2](https://laravel.com/docs/5.2/releases#laravel-5.2) platform, and incorporates the 
+[Dingo API](https://github.com/dingo/api), [JWT Auth](https://github.com/tymondesigns/jwt-auth), 
+[Bouncer](https://github.com/JosephSilber/bouncer) and [CORS](https://github.com/barryvdh/laravel-cors) packages.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as authentication, routing, sessions, queueing, and caching.
+This version is modified to include and make use of [Vue.js](http://vuejs.org/) along with 
+[Vue Resource](https://github.com/vuejs/vue-resource), [Vue-Strap](https://yuche.github.io/vue-strap/), and 
+[Vuex](https://github.com/vuejs/vuex).
 
-Laravel is accessible, yet powerful, providing tools needed for large, robust applications. A superb inversion of control container, expressive migration system, and tightly integrated unit testing support give you the tools you need to build any application with which you are tasked.
-
-## Official Documentation
-
-Documentation for the framework can be found on the [Laravel website](http://laravel.com/docs).
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](http://laravel.com/docs/contributions).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
+Documentation is currently under construction, and will be available soon on the 
+[Wiki](https://github.com/dojorob76/laravel-5-2-self-consuming-api/wiki).
